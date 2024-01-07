@@ -1,0 +1,118 @@
+﻿@using SMSClient.Constants;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<SMSClient.Models.Student>
+
+<h2>Students</h2>
+<div asp-accesslevel="@AccessLevels.Create" asp-module="@Modules.Student" style="display: flex; justify-content: end; margin-bottom: 20px">
+    @Html.DevExtreme().Button().Text("Create a Student").OnClick("openAddStudentModal")
+</div>
+
+<div style="margin-top: 10px">
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Date of Birth
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Semester
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>
+                        @obj.FirstName
+                    </td>
+                    <td>
+                        @obj.LastName
+                    </td>
+                    <td>
+                        @obj.DateOfBirth
+                    </td>
+                    <td>
+                        @obj.Email
+                    </td>
+                    <td>
+                        @if(obj.Department == null) {} else @obj.Department.LongName
+                    </td>
+                    <td>
+                            @if (obj.Semester == null) { }
+                        else
+                            @obj.Semester.LongName
+
+                    </td>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                                <button asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.Student" id="@obj.Id"onclick="openEditStudentModal(this.id)" class="btn btn-primary mx-2">Edit</button>
+                                <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.Student" id="@obj.Id" onclick="openDeleteStudentModal(this.id)" class="btn btn-danger mx-2"> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+<div id="addStudentModalContainer"></div>
+<div id="editStudentModalContainer"></div>
+<div id="deleteStudentModalContainer"></div>
+
+<script>
+    function openAddStudentModal() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ShowAddPage", "Students")',
+            success: function (response) {
+                $("#addStudentModalContainer").html(response);
+                $("#addStudentModal").modal("show");
+            }
+        })
+    }
+
+
+    function openEditStudentModal(id) {
+        $.ajax({
+            type: "GET",
+            data: { id: id },
+            url: '@Url.Action("ShowEditPage", "Students")',
+            success: function (response) {
+                $("#editStudentModalContainer").html(response);
+                $("#editStudentModal").modal("show");
+            }
+        })
+    }
+
+    function openDeleteStudentModal(id) {
+        $.ajax({
+            type: "GET",
+            data: { id: id },
+            url: '@Url.Action("ShowDeletePage", "Students")',
+            success: function (response) {
+                $("#deleteStudentModalContainer").html(response);
+                $("#deleteStudentModal").modal("show");
+            }
+        })
+    }
+</script>

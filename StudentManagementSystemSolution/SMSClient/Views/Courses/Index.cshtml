@@ -1,0 +1,101 @@
+﻿@using SMSClient.Constants;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<SMSClient.Models.Course>
+
+
+<h2>Courses</h2>
+<a asp-accesslevel="@AccessLevels.Create" asp-module="@Modules.Course" style="display: flex; justify-content: end; margin-bottom: 20px">
+    @Html.DevExtreme().Button().Text("Create a Course").OnClick("openCreateCourseModal")
+</a>
+
+@*
+@Html.DevExtreme().DataGrid().DataSource(d=>d.Mvc().LoadAction("GetCourses").UpdateAction("UpdateCourse").DeleteAction("DeleteCourse").Key("CourseCode")).Columns(c => {
+    c.Add().DataField("CourseCode");
+    c.Add().DataField("ShortName");
+    c.Add().DataField("LongName");
+}).Editing(e => e.AllowDeleting(true).AllowUpdating(true))*@
+
+
+<div style="margin-top: 10px">
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Course Code
+                </th>
+                <th>
+                    Short Name
+                </th>
+                <th>
+                    Long Name
+                </th>
+                <th>
+                    Credits
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td width="30%">
+                        @obj.CourseCode
+                    </td>
+                    <td width="30%">
+                        @obj.ShortName
+                    </td>
+                    <td width="30%">
+                        @obj.LongName
+                    </td>
+                    <td width="30%">
+                        @obj.Credits
+                    </td>
+                    <td>
+                        <div class="w-75 d-flex">
+                            
+                            <a asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.Course" id="@obj.CourseCode" asp-action="EditCourse" asp-controller="Courses" asp-route-courseCode="@obj.CourseCode"  class="btn btn-primary mx-2">Edit</a>
+                            <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.Course" id="@obj.CourseCode" onclick="openDeleteCourseModal(this.id)" class="btn btn-danger mx-2"> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<div id="deleteCourseModalContainer"></div>
+
+<script>
+    function openCreateCourseModal() {
+        $.ajax({
+            url: '@Url.Action("ShowCreateCourseModal")',
+            dataType: 'html',
+            success: function (data) {
+                $("body").append(data);
+                $("#courseCreateModal").modal("show");
+            }
+        });
+    }
+
+    function openDeleteCourseModal(courseCode) {
+        $.ajax({
+            url: '@Url.Action("ShowDeleteCourseModal")' + "?courseCode=" + courseCode,
+            dataTyle: 'html',
+            success: function (data) {
+                $("#deleteCourseModalContainer").html(data);
+                $("#courseDeleteModal").modal("show");
+            }
+        })
+    }
+</script>
+
+
+                    

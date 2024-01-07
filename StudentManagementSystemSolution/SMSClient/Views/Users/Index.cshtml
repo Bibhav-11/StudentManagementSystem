@@ -1,0 +1,106 @@
+﻿@using SMSClient.Constants;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<SMSClient.Models.Identity.ApplicationUser>
+
+<h2>Users</h2>
+
+<button style="display: block; margin-left: auto" asp-accesslevel="@AccessLevels.Create" asp-module="@Modules.User" onclick="openCreateUserModal()" type="button" class="btn btn-primary">
+    Create a User
+</button>
+
+
+<div style="margin-top: 10px">
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Email
+                </th>
+                <th>
+                    UserName
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td width="50%">
+                        @obj.Email
+                    </td>
+                    <td width="30%">
+                        @obj.UserName
+                    </td>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                            <button asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.User" id="@obj.Id" onclick="renderPartialViewUpdate(this.id)" class="btn btn-primary mx-2">Edit</button>
+                            <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.User" id="@obj.Id" onclick="renderPartialViewDelete(this.id)" class="btn btn-danger mx-2"> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<div id="createUserModalContainer"></div>
+<div id="editUserModalContainer"></div>
+<div id="deleteUserModalContainer"></div>
+
+
+
+
+<div id="myPartialContainer">
+
+</div>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
+<script>
+
+    function openCreateUserModal() {
+        $.ajax({
+            url: '@Url.Action("ShowCreateUserModal")',
+            dataType: 'html',
+            success: function (data) {
+                $("#createUserModalContainer").html(data);
+                $("#exampleModalLong").modal("show");
+            }
+        });
+    }
+    //HERE IS THE MISTAKE
+    function renderPartialViewUpdate(userId) {
+        console.log(userId);
+        $.ajax({
+            url: '@Url.Action("ShowUpdateUserModal", "Users")' + "?userId=" + userId,
+            dataTyle: 'html',
+            success: function (data) {
+                $("#editUserModalContainer").html(data);
+                $("#editModal").modal("show");
+            }
+        })
+    }
+
+    function renderPartialViewDelete(userId) {
+        $.ajax({
+            url: '@Url.Action("Delete", "Users")' + "?userId=" + userId,
+            dataTyle: 'html',
+            success: function (data) {
+                $("#deleteUserModalContainer").html(data);
+                $("#deleteModal").modal("show");
+
+            },
+            error: function (er) {
+                console.log(er);
+            }
+        })
+    }
+</script>

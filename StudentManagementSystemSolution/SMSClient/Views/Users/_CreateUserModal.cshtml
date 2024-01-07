@@ -1,0 +1,215 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Models.ViewModel.UserFormViewModel
+
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+                
+        <div class="modal-content">
+          <form id="myForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create a User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label>Full Name</label>
+                        <input asp-for="FullName" class="form-control" id="fullName" type="text" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="FullName"></span>
+                    </div>
+                    <div class="col-6">
+                        <label>User Name</label>
+                        <input asp-for="UserName" class="form-control" id="userName" type="text" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="UserName"></span>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label>Email</label>
+                        <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="col-6">
+                        <label>Gender</label>
+                        <input asp-for="Gender" class="form-control" id="gender" type="text" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="Gender"></span>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label>Password</label>
+                        <input asp-for="Password" class="form-control" id="password" type="password" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="col-6">
+                        <label>Confirm Password</label>
+                        <input asp-for="ConfirmPassword" class="form-control" id="confirmPassword" type="password" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                    </div>
+                </div>
+
+
+                <div class="row mt-2">
+                    <label>Date of Birth</label>
+                    <div class="dx-field">
+                        <div class="dx-field-value">
+                            <div id="constant"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label>Roles</label>
+                            <div id="rolesContainer"></div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="Save" type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+
+           </form>
+            
+        </div>
+       </div>
+
+</div>
+
+
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script>
+    var error = false;
+    var date;
+    var rolesData;
+
+    $('#constant').dxDateBox({
+        placeholder: '10/16/2018',
+        showClearButton: true,
+        useMaskBehavior: true,
+        displayFormat: 'shortdate',
+        type: 'date',
+        inputAttr: { 'aria-label': 'Date' },
+        onValueChanged: function (e) {
+            date = e.value;
+        } 
+    });
+
+    $(function () {
+        $("#rolesContainer").dxTagBox({
+            dataSource: '@Url.Action("GetRolesForDropdown", "Users")',
+            valueExpr: 'Name',
+            displayExpr: 'Name',
+            onValueChanged: function (e) {
+                rolesData = e.value;
+            }
+        });
+    });
+    
+
+        $("#userName").on("change", function () {
+            let userName = $("#userName").val();
+            if (!userName) return;
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckIfUserNameExists", "Users")',
+                data: { userName: userName },
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        $(".usernameExists").text("User Name already exists")
+                        error = true;
+                    }
+                    else {
+                        $(".usernameExists").text("")
+                        error = false;
+                    }
+                },
+                error: function (ex) {
+                    console.log(ex);
+                }
+            })
+        })
+
+        // $("#role").one('click', function () {
+        //     $.ajax({
+        //     url: '@Url.Action("ShowRolesDropdown")',
+        //         dataType: 'html',
+        //         success: function (data) {
+        //             console.log(data);
+        //             $("#role").append(data);
+        //         }
+        // });
+        // })
+
+
+        $("#myForm").on('submit', function (e) {
+            e.preventDefault();
+            $.validator.unobtrusive.parse('#myForm');
+            $("#myForm").validate();
+
+            if (!$("#myForm").valid() || error) {
+                    $.notify("Not valid");
+                return;
+            }
+            $("#Save").prop("disabled", true);
+            $("#Save").html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+            );
+            let formData = {
+                fullName: $("#fullName").val(),
+                userName: $("#userName").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                confirmPassword: $("#confirmPassword").val(),
+                gender: $("#gender").val(),
+                dateOfBirth: date.toJSON(),
+                roles: rolesData,
+            }
+            console.log(formData);
+            
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AjaxPost", "Users")',
+                dataType: "json",
+                data: formData,
+                success: function (result) {
+                    if (result.success) {
+                        $.notify(result.message, "success");
+                        $("#exampleModalLong").modal("hide");
+                        location.reload();
+                    }
+                    else $.notify(result.message)
+                }
+                ,
+                error: function (ex) {
+                    console.log(ex);
+                    $.notify('Failed to retrieve data : ' + ex);
+                },
+                complete: function () {
+                    $("#Save").prop("disabled", false);
+                    $("#Save").html("Save changes");
+                }
+                });
+        });
+  </script>
+
+
+

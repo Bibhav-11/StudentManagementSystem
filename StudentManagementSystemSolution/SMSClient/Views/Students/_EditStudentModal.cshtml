@@ -1,0 +1,157 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Models.Student
+
+<div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="editStudentForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create a Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            @* <input asp-for="Id" class="form-control" id="userId" disabled />*@
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>First Name</label>
+                            <input asp-for="FirstName" class="form-control" id="firstName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="FirstName"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>Last Name</label>
+                            <input asp-for="LastName" class="form-control" id="lastName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="LastName"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                        <div class="row mt-2">
+                                <label>Date Of Birth</label>
+                                <div class="dx-field-value">
+                                    <div data-value="@Model.DateOfBirth" id="editStudentDOBContainer"></div>
+                                </div>
+                        </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Department</label>
+                             <div data-value="@Model.DepartmentId" id="departmentDropdown"></div>
+                        </div>
+                        <div class="col-6">
+                            <label>Semester</label>
+                            <div data-value="@Model.SemesterId" id="semesterDropdown"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="saveEditDepartment" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+    var date, department = $("#departmentDropdown").data("value"), semester = $("#semesterDropdown").data("value");
+    $('#editStudentDOBContainer').dxDateBox({
+        placeholder: '10/16/2018',
+        showClearButton: true,
+        useMaskBehavior: true,
+        displayFormat: 'shortdate',
+        value: $("#editStudentDOBContainer").data("value"),
+        type: 'date',
+        inputAttr: { 'aria-label': 'Date' },
+        onValueChanged: function (e) {
+            date = e.value;
+        }
+    });
+
+    $("#departmentDropdown").dxSelectBox({
+        dataSource: '@Url.Action("GetDepartments", "Students")',
+        displayExpr: "LongName",
+        valueExpr: "Id",
+        value: $("#departmentDropdown").data("value"),
+        onValueChanged: function (e) {
+            department = e.value;
+        }
+    })
+
+    $("#semesterDropdown").dxSelectBox({
+        dataSource: '@Url.Action("GetSemesters", "Students")',
+        displayExpr: "LongName",
+        valueExpr: "Id",
+        value: $("#semesterDropdown").data("value"),
+        onValueChanged: function (e) {
+            semester = e.value;
+        }
+    })
+
+    $("#editStudentForm").on('submit', function (e) {
+        e.preventDefault();
+        $.validator.unobtrusive.parse('#editStudentForm');
+        $("#editStudentForm").validate();
+
+        if (!$("#editStudentForm").valid()) {
+            $.notify("Not valid");
+            return;
+        }
+        $("#Save").prop("disabled", true);
+        $("#Save").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+        let formData = {
+            id: $("#Id").val(),
+            firstName: $("#firstName").val(),
+            lastName: $("#lastName").val(),
+            email: $("#email").val(),
+            dateOfBirth: date,
+            departmentId: department,
+            semesterId: semester,
+        }
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            data: formData,
+            url: '@Url.Action("AjaxUpdate", "Students")',
+            success: function (response) {
+                if (response == true) {
+                    $.notify("Student Added Successfully", "success");
+                    $("#editStudentModal").modal("hide");
+                    location.reload();
+                }
+                else $.notify("Sorry some error occurred");
+
+            },
+            error: function (e) {
+                $.notify(e.message);
+            }
+        })
+
+    })
+</script>

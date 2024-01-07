@@ -1,0 +1,46 @@
+﻿@using DevExtreme.AspNet.Mvc;
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div style="padding: 20px 10px">
+    @if (User.IsInRole("admin"))
+    {
+
+        var name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+
+        <div> Welcome Admin @name </div>
+    }
+    @if (User.IsInRole("teacher"))
+    {
+        var name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+
+        <div> Welcome Teacher @name </div>
+    }
+
+    @if (User.IsInRole("student"))
+    {
+        var name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+        <div> Welcome Student @name </div>
+    }
+</div>
+
+@(Html.DevExtreme().List()
+                    .Height("100%")
+                    .Grouped(true)
+                    .ID("userList")
+                    .DataSource(Model)
+)
+
+
+@*<div>
+     <h2>User Claims</h2>
+     @foreach(var c in User.Claims)
+     {
+         <b>@c.Type</b>
+         <p>@c.Value</p>
+     }
+ </div>
+*@

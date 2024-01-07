@@ -1,0 +1,171 @@
+﻿@using SMSClient.Models.ViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<style>
+    .main-container {
+        display: flex;
+        min-height: 90vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .dx-form-container {
+        width: 70%;
+        border-radius: 5px;
+        box-shadow: 0 0 2px 2px rgba(0,0,0,0.1);
+        padding: 40px;
+    }
+</style>
+
+
+<div class="main-container">
+
+<div class="dx-fieldset-header">Add a Department</div>
+<div class="dx-form-container">
+
+
+@using (Html.BeginForm("Create", "Departments", FormMethod.Post))
+{
+
+    @(Html.DevExtreme().Form<DepartmentViewModel>()
+                    .Items(items =>
+                    {
+                        items.AddGroup()
+                            .ColCount(2)
+                            .Items(groupItems =>
+                            {
+                                groupItems.AddSimpleFor(m => m.ShortName)
+                                    .Editor(e => e.TextBox());
+
+                                groupItems.AddSimpleFor(m => m.LongName)
+                                    .Editor(e => e.TextBox());
+
+                            });
+
+                        items.AddGroup()
+                        .ColCount(2)
+                        .Items(groupItems =>
+                        {
+                                groupItems.AddSimpleFor(m => m.Email)
+                                .Editor(e => e.TextBox());
+
+                        });
+
+                        items.AddGroup()
+                        .ColCount(2)
+                        .Items(groupItems =>
+                        {
+                                groupItems.AddSimpleFor(m => m.CourseCodes)
+                                .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetUnassignedCourses")).DisplayExpr("LongName").ValueExpr("CourseCode"));
+                        });
+
+                        items.AddGroup()
+                        .ColCount(2)
+                        .Items(groupItems =>
+                        {
+                            groupItems.AddSimpleFor(m => m.SemesterIds)
+                        .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetSemesters")).DisplayExpr("LongName").ValueExpr("Id"));
+
+                            groupItems.AddSimpleFor(m => m.StudentIds)
+                            .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetUnassignedStudents")).DisplayExpr("FirstName").ValueExpr("Id"));
+                        });
+
+
+                        items.AddButton()
+                                    .ButtonOptions(button => button.Text("Add Department")
+                                                                    .UseSubmitBehavior(true));
+                            })
+        )
+
+}
+</div>
+
+</div>
+
+@*<div class="dx-fieldset-header">Add Semesters to Department</div>
+<div style="width: 60%">
+    @using (Html.BeginForm("AddSemesterToDepartment", "Departments", FormMethod.Post))
+    {
+
+        @(Html.DevExtreme().Form<SemesterDepartmentViewModel>()
+            .Items(items =>
+            {
+                items.AddGroup()
+                .ColCount(2)
+                .Items(groupItems =>
+                {
+                 groupItems.AddSimpleFor(m => m.DepartmentId)
+                .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetDepartments")).DisplayExpr("LongName").ValueExpr("Id")
+                .OnValueChanged("updateDepartmentIdForSemester")
+                .ID("departmentSelectSemester"));
+
+                groupItems.AddSimpleFor(m => m.SelectedSemestersId)
+                .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetRemainingSemestersofDepartment").LoadParams(new { department = new JS("function() {return departmentForSemester;}") }))
+                .ID("semesterTag")
+                .DisplayExpr("LongName")
+                .ValueExpr("Id"));
+
+                });
+
+                items.AddButton()
+                .ButtonOptions(button => button.Text("Add Semesters")
+                .UseSubmitBehavior(true));
+            })
+            )
+
+    }
+</div>
+
+<div class="dx-fieldset-header">Add Courses to Department</div>
+<div style="width: 60%">
+    @using (Html.BeginForm("AddCourseToDepartment", "Departments", FormMethod.Post))
+    {
+
+        @(Html.DevExtreme().Form<CourseDepartmentViewModel>()
+            .Items(items =>
+            {
+                items.AddGroup()
+                .ColCount(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.DepartmentId)
+                .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetDepartments")).DisplayExpr("LongName").ValueExpr("Id")
+                .OnValueChanged("updateDepartmentIdForCourse")
+                .ID("departmentSelectCourse"));
+
+                groupItems.AddSimpleFor(m => m.SelectedCourseId)
+                .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetRemainingCoursesofDepartment").LoadParams(new { department = new JS("function() {return departmentForCourse;}") }))
+                .ID("courseTag")
+                .DisplayExpr("LongName")
+                .ValueExpr("CourseCode"));
+
+                });
+
+                items.AddButton()
+                .ButtonOptions(button => button.Text("Add Courses")
+                .UseSubmitBehavior(true));
+            })
+            )
+
+    }
+</div>
+*@
+
+<script>
+    let departmentForSemester, departmentForCourse;
+    function updateDepartmentIdForSemester() {
+        departmentForSemester = $("#departmentSelectSemester").dxSelectBox("instance").option("value");
+        $("#semesterTag").dxTagBox("instance").getDataSource().reload();
+        $("#semesterTag").dxTagBox("instance").reset();
+    }
+
+    function updateDepartmentIdForCourse() {
+        departmentForCourse = $("#departmentSelectCourse").dxSelectBox("instance").option("value");
+        $("#courseTag").dxTagBox("instance").getDataSource().reload();
+        $("#courseTag").dxTagBox("instance").reset();
+    }
+</script>

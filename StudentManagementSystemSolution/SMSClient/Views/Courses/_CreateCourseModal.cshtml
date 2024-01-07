@@ -1,0 +1,154 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Models.Course
+
+
+<div class="modal fade" id="courseCreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <form id="courseCreateForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create a Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Course Code</label>
+                            <input asp-for="CourseCode" class="form-control" id="courseCode" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="CourseCode"></span>
+                            <span class="text-danger courseExists"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Short Name</label>
+                            <input asp-for="ShortName" class="form-control" id="shortName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="ShortName"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>Long Name</label>
+                            <input asp-for="LongName" class="form-control" id="longName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="LongName"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Credits</label>
+                            <input asp-for="Credits" class="form-control" id="credits" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Credits"></span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="courseSave" type="submit" class="btn btn-primary">Create Course</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script>
+    let errorCourse = false;
+    $("#courseCode").on("change", function () {
+        let courseCode = $("#courseCode").val();
+        if (!courseCode) return;
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckIfCourseExists", "Courses")',
+            data: { courseCode: courseCode },
+            dataType: "json",
+            success: function (result) {
+                console.log(courseCode);
+                if (result == true) {
+                    $(".courseExists").text("Course already exists")
+                    errorCourse = true;
+                }
+                else {
+                    $(".courseExists").text("")
+                    errorCourse = false;
+                }
+            },
+            error: function (ex) {
+                console.log(ex);
+            }
+        })
+    })
+
+
+    $("#courseCreateForm").on('submit', function (e) {
+        e.preventDefault();
+        $.validator.unobtrusive.parse('#courseCreateForm');
+        $("#courseCreateForm").validate();
+
+        if (!$("#courseCreateForm").valid() || errorCourse) {
+            $.notify("Not valid");
+            return;
+        }
+        $("#courseSave").prop("disabled", true);
+        $("#courseSave").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+        let formData = {
+            courseCode: $("#courseCode").val(),
+            shortName: $("#shortName").val(),
+            longName: $("#longName").val(),
+            credits: $("#credits").val(),
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AjaxPost", "Courses")',
+            dataType: "json",
+            data: formData,
+            success: function (result) {
+                if (result.success) {
+                    $.notify(result.message, "success");
+                    $('#courseCreateForm')[0].reset();
+                    $("#courseCreateModal").modal("hide");
+                    location.reload();
+                }
+                else $.notify(result.message)
+            }
+            ,
+            error: function (ex) {
+                console.log(ex);
+                $.notify('Failed to retrieve data : ' + ex);
+            },
+            complete: function () {
+                $("#courseSave").prop("disabled", false);
+                $("#courseSave").html("Save changes");
+            }
+        });
+    });
+</script>
+
+
+

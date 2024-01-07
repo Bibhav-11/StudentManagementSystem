@@ -1,0 +1,87 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model SMSClient.Models.Semester
+
+<div class="modal fade" id="deleteSemesterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <form id="deleteSemesterForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Delete a User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Id</label>
+                            <span id="spanId" data-id="@Model.Id">@Model.Id</span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Short Name</label>
+                            <span>@Model.ShortName</span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Long Name</label>
+                            <span>@Model.LongName</span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Start Date: </label>
+                            <span>@Model.StartDate</span>
+                        </div>
+                        <div class="col-6">
+                            <label>Emd Date: </label>
+                            <span>@Model.EndDate</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="Save" type="submit" class="btn btn-primary">Delete Semester</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $("#deleteSemesterForm").on('submit', function (e) {
+        e.preventDefault();
+        var id = $("#spanId").data("id");
+        $.ajax({
+            type: "POST",
+            data: { id: id },
+            url: '@Url.Action("AjaxDelete", "Semesters")',
+            success: function (response) {
+                if (response == true) {
+                    $.notify("Semester Deleted Successfully", "success");
+                    $("#deleteSemesterModal").modal("hide");
+                    location.reload();
+                }
+                else $.notify("Sorry some error occurred");
+
+            },
+            error: function (e) {
+                $.notify(e.message);
+            }
+        })
+    })
+</script>

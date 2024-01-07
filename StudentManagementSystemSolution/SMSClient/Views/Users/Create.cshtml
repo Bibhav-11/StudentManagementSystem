@@ -1,0 +1,73 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@using SMSClient.Models.ViewModel
+
+
+@using(Html.BeginForm()) {
+
+    using(Html.DevExtreme().ValidationGroup()) {
+            
+        @(
+    Html.DevExtreme().Form<UserFormViewModel>()
+
+                                    .Items(items =>
+                                    {
+                                        items.AddGroup()
+                                            .ColCount(2)
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddSimpleFor(m => m.FullName)
+                                                    .Editor(e => e.TextBox());
+
+                                                groupItems.AddSimpleFor(m => m.UserName)
+                                                    .Editor(e => e.TextBox());
+
+                                                groupItems.AddSimpleFor(m => m.Email)
+                                                    .Editor(e => e.TextBox());
+
+                                                groupItems.AddSimpleFor(m => m.Password)
+                                                    .Editor(e => e.TextBox().Mode(TextBoxMode.Password));
+
+                                                groupItems.AddSimpleFor(m => m.Gender)
+                                                    .Editor(e => e.SelectBox().DataSource(new []
+                                                    {
+                                                        "Male", "Female"
+                                                    }));
+
+                                                groupItems.AddSimpleFor(m => m.DateOfBirth)
+                                                    .Editor(e => e.DateBox());
+
+                                                groupItems.AddSimpleFor(m => m.Roles)
+                                                    .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetRoles"))
+                                                                .DisplayExpr("Name")
+                                                                .ValueExpr("Name")
+                                                                .ApplyValueMode(EditorApplyValueMode.UseButtons)
+                                                                .ShowSelectionControls(true));
+
+                                            });
+
+                                        items.AddGroup()
+                                            .ColCount(2)
+                                            .Items(groupItems =>
+                                            {
+                                                groupItems.AddButton()
+                                                    .ButtonOptions(button => button.Text("Add a User")
+                                                                                    .Type(ButtonType.Danger)
+                                                                                    .UseSubmitBehavior(true)
+                                            );
+                                            });
+                })
+         )
+            
+
+    }
+
+}
+
+<script>
+
+</script>

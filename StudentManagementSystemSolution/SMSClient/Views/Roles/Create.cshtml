@@ -1,0 +1,100 @@
+﻿@using SMSClient.Models.ViewModel;
+
+
+@model SMSClient.Models.ViewModel.RoleViewModel
+
+
+@using (Html.BeginForm("Create", "Roles", FormMethod.Post)) {
+
+    using (Html.DevExtreme().ValidationGroup())
+    {
+
+        @(
+    Html.DevExtreme().Form<RoleViewModel>()
+                                .FormData(Model)
+                                .Items(items =>
+                                {
+                                    items.AddGroup()
+                                        .Caption("Create a Role")
+                                        .ColCount(2)
+                                        .Items(groupItems =>
+                                        {
+                                            groupItems.AddSimpleFor(m => m.Name)
+                                                .Label(l => l.Template(new JS("nameLabel")))
+                                                .Editor(e => e
+                                                    .TextBox()
+                                                    .InputAttr("aria-label", "Name")
+                                                );
+                                        });
+
+                                    items.AddGroup()
+                                        .Caption("App Permissions")
+                                        .Items(groupItems =>
+                                        {
+                                            var group = "";
+                                        for (int i = 0; i < Model.CustomRoleClaims.Count(); i++)
+                                        {
+                                            if (Model.CustomRoleClaims[i].Module.ToString() != group)
+                                            {
+                                                group = Model.CustomRoleClaims[i].Module;
+                                                groupItems.AddSimple().Label(l => l.Text(group.ToUpper()));
+                                            }
+                                    groupItems.AddSimpleFor(m => m.IsSelected[i])
+                                    .Label(config => config.Visible(false))
+                                    .Editor(editor => editor.CheckBox()
+                                    .Text(Model.CustomRoleClaims.ElementAt(i).DisplayClaimName)
+                                        );
+                            }
+                        });
+
+                                           
+
+            items.AddGroup()
+                .Items(groupItems =>
+                {
+                    groupItems.AddButton()
+                .HorizontalAlignment(HorizontalAlignment.Right)
+                .ButtonOptions(b => b.Text("Add a Role")
+                                        .Type(ButtonType.Success)
+                                        .UseSubmitBehavior(true)
+                );
+                });
+        })
+            .OnContentReady("validateForm")
+        )
+
+    }
+
+}
+
+
+
+<script>
+    function nameLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-user'}></i>${data.text}</div>`);
+    }
+
+    function positionLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-info'}></i>${data.text}</div>`);
+    }
+
+    function eventLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-event'}></i>${data.text}</div>`);
+    }
+
+    function phoneLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-tel'}></i>${data.text}</div>`);
+    }
+
+    function addressLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-home'}></i>${data.text}</div>`);
+    }
+
+    function emailLabel(data) {
+        return $(`<div><i class='dx-icon dx-icon-email'}></i>${data.text}</div>`);
+    }
+
+    function validateForm(e) {
+        e.component.validate();
+    }
+</script>

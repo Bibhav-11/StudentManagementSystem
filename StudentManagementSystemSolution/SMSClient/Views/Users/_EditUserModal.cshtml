@@ -1,0 +1,170 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Models.ViewModel.UserEditViewModel
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <form id="editUserForm">
+                <div class="modal-header">
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.UserInfoId)
+                    <h5 class="modal-title" id="exampleModalLongTitle">Update a User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Full Name</label>
+                            <input asp-for="FullName" class="form-control" id="fullName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="FullName"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>User Name</label>
+                            <input asp-for="UserName" class="form-control" id="userName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="UserName"></span>
+                            <span class="text-danger usernameExists"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>Gender</label>
+                            <input asp-for="Gender" class="form-control" id="gender" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Gender"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Date Of Birth</label>
+                            <input asp-for="DateOfBirth" class="form-control" id="dateOfBirth" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="DateOfBirth"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="editUserSaveButton" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script>
+    var error = false;
+    $("#userName").on("change", function () {
+        let userName = $("#userName").val();
+        if (!userName) return;
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckIfUserNameExists", "Users")',
+            data: { userName: userName },
+            dataType: "json",
+            success: function (result) {
+                if (result == true) {
+                    $(".usernameExists").text("User Name already exists")
+                    error = true;
+                }
+                else {
+                    $(".usernameExists").text("")
+                    error = false;
+                }
+            },
+            error: function (ex) {
+                console.log(ex);
+            }
+        })
+    })
+
+    $("#role").one('click', function () {
+        $.ajax({
+            url: '@Url.Action("ShowRolesDropdown")',
+            dataType: 'html',
+            success: function (data) {
+                console.log(data);
+                $("#role").append(data);
+            }
+        });
+    })
+
+
+    $("#editUserForm").on('submit', function (e) {
+        e.preventDefault();
+        $.validator.unobtrusive.parse('#editUserForm');
+        $("#editUserForm").validate();
+
+        if (!$("#editUserForm").valid() || error) {
+            $.notify("Not valid");
+            return;
+        }
+        $("#editUserSaveButton").prop("disabled", true);
+        $("#editUserSaveButton").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+        let formData = {
+            id: $("#Id").val(),
+            userInfoid: $("#UserInfoId").val(),
+            fullName: $("#fullName").val(),
+            userName: $("#userName").val(),
+            email: $("#email").val(),
+            gender: $("#gender").val(),
+            dateOfBirth: $("#dateOfBirth").val(),
+            role: $("#role").val(),
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AjaxUpdate", "Users")',
+            dataType: "json",
+            data: formData,
+            success: function (result) {
+                if (result.success) {
+                    $.notify(result.message, "success");
+                    $('#editModal').modal("hide");
+                    location.reload();
+                }
+                else $.notify(result.message)
+            }
+            ,
+            error: function (ex) {
+                console.log(ex);
+                $.notify('Failed to retrieve data : ' + ex);
+            },
+            complete: function () {
+                $("#editUserSaveButton").prop("disabled", false);
+                $("#editUserSaveButton").html("Save changes");
+            }
+        });
+    });
+    
+</script>
+
+
+

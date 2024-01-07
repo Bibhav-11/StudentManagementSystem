@@ -1,0 +1,96 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@using SMSClient.Models.ViewModel
+
+
+
+
+
+@using (Html.BeginForm())
+{
+
+    using (Html.DevExtreme().ValidationGroup())
+    {
+
+        @(
+    Html.DevExtreme().Form<StudentViewModel>()
+
+                                            .Items(items =>
+                                                {
+
+                                                    items.AddGroup()
+                                                    .ColCount(2)
+                                                    .Items(groupItems =>
+                                                    {
+                                                        groupItems.AddSimpleFor(m => m.UserId)
+                                                            .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetUserIds"))
+                                                            .ID("userBox").DisplayExpr("UserName").ValueExpr("Id")
+                                                            .OnValueChanged("onUserChange"));
+                                                    });
+
+                                                    items.AddSimple()
+                                                            .Template(@<text>
+                                                                @(Html.DevExtreme().List()
+                                                        .Height("100%")
+                                                        .Grouped(true)
+                                                        .ID("userList")
+                                                        .NoDataText("Please select a Student")
+                                                        .DataSource(d => d.Mvc().LoadAction("GetUserInfo").LoadParams(new { userid = new JS                     ("function() {return userid;}") }))
+                                                        )
+                                                                </text>);
+
+
+                                                    items.AddGroup()
+                                                        .ColCount(2)
+                                                        .Items(groupItems =>
+                                                        {
+                                                            groupItems.AddSimpleFor(m => m.DepartmentId)
+                                                                .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetDepartments")).DisplayExpr("LongName").ValueExpr("Id")
+                                                                .ID("departmentBox")
+                                                                .OnValueChanged("onDepartmentChange"));
+
+                                                            groupItems.AddSimpleFor(m => m.SemesterId)
+                                                                .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetSemesterOfDepartment")
+                                                                .LoadParams(new { department = new JS("function() { return department; }") }))
+                                                                .DisplayExpr("LongName")
+                                                                .ValueExpr("Id")
+                                                                .ID("semesterBox"));
+                                                        });
+
+                                            items.AddGroup()
+                                                .ColCount(1)
+                                                .Items(groupItems =>
+                                                {
+                                                    groupItems.AddButton()
+                                                        .ButtonOptions(button => button.Text("Add a User")
+                                                                                        .Type(ButtonType.Danger)
+                                                                                        .UseSubmitBehavior(true)
+                                                );
+                                                });
+                                        })
+             )
+
+
+    }
+
+}
+
+<script>
+    let department, userid;
+    function onDepartmentChange() {
+        department = $("#departmentBox").dxSelectBox("instance").option("value");
+        $("#semesterBox").dxSelectBox("instance").reset();
+        $("#semesterBox").dxSelectBox("instance").getDataSource().reload();
+    }
+
+    function onUserChange() {
+        userid = $("#userBox").dxSelectBox("instance").option("value");
+        console.log(userid);
+        $("#userList").dxList("instance").getDataSource().reload();
+    }
+</script>
