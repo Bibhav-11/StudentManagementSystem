@@ -8,11 +8,9 @@ using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
 using SMSClient.Data.Identity;
-using SMSClient.Models;
-using SMSClient.Models.Identity;
-using SMSClient.Models.ViewModel;
+using SMSClient.Model;
 using SMSClient.Service.Departments;
-using SMSClient.Service.Semesters;
+using SMSClient.Service.Classes;
 using SMSClient.Service.Students;
 using SMSClient.Service.Users;
 
@@ -21,23 +19,21 @@ namespace SMSClient.Controllers
     public class StudentsController: Controller
     {
         private readonly IDepartmentService _departmentService;
-        private readonly IUsersService _usersService;
         private readonly IStudentService _studentService;
-        private readonly ISemesterService _semesterService;
+        private readonly IClassService _classService;
 
-        public StudentsController(IDepartmentService departmentService, IUsersService usersService, IStudentService studentService, ISemesterService semesterService)
+        public StudentsController(IDepartmentService departmentService, IStudentService studentService, IClassService classService)
         {
             _departmentService = departmentService;
-            _usersService = usersService;
             _studentService = studentService;
-            _semesterService = semesterService;
+            _classService = classService;
         }
 
         [CustomAuthorize(AccessLevels.View, Modules.Student)]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var students = await _studentService.GetStudentsWithDepartmentAndSemesterInfo();
+            var students = await _studentService.GetStudentsWithClassInfo();
             return View(students);
         }
 
@@ -137,9 +133,9 @@ namespace SMSClient.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetSemesters()
+        public async Task<JsonResult> GetClasses()
         {
-            return Json(await _semesterService.GetSemesters());
+            return Json(await _classService.GetClasses());
         }
 
     }

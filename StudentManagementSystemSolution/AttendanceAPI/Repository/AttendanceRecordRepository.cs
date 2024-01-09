@@ -1,4 +1,5 @@
 ﻿using AttendanceAPI.Data;
+using AttendanceAPI.DTO;
 using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,9 +30,9 @@ namespace AttendanceAPI.Repository
             return true;
         }
 
-        public async Task<AttendanceRecord?> GetAsync(int id)
+        public async Task<IEnumerable<AttendanceRecord>> GetAsync(int id)
         {
-            var record = await _attendanceContext.AttendanceRecords.FindAsync(id);
+            var record = await _attendanceContext.AttendanceRecords.Where(ar => ar.StudentId == id).ToListAsync();
             return record;
         }
 
@@ -74,6 +75,19 @@ namespace AttendanceAPI.Repository
         {
             _attendanceContext.AddRange(records);
             await _attendanceContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckIfAlreadyExists()
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var alreadyExists = await _attendanceContext.AttendanceRecords.AnyAsync(a => a.AttendanceDate == today);
+            return alreadyExists;
+        }
+
+        public async Task<IEnumerable<AttendanceRecord>> GetAttendance(AttendanceRecordGetDTO attendanceRequest)
+        {
+            var records = await _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList @StudentId = {attendanceRequest.StudentId}, @TeacherId = {attendanceRequest.TeacherId}, @StartDate = {attendanceRequest.StartDate}, @EndDate={attendanceRequest.EndDate}").ToListAsync();
+            return records;
         }
     }
 }

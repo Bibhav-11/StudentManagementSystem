@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSClient.Data.Identity;
 
@@ -15,60 +16,35 @@ namespace SMSClient.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("CourseSemester", b =>
-                {
-                    b.Property<string>("CoursesCourseCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SemestersId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CoursesCourseCode", "SemestersId");
-
-                    b.HasIndex("SemestersId");
-
-                    b.ToTable("CourseSemester");
-                });
-
-            modelBuilder.Entity("DepartmentSemester", b =>
-                {
-                    b.Property<int>("DepartmentsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SemestersId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("DepartmentsId", "SemestersId");
-
-                    b.HasIndex("SemestersId");
-
-                    b.ToTable("DepartmentSemester");
-                });
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -77,17 +53,19 @@ namespace SMSClient.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -100,17 +78,19 @@ namespace SMSClient.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -122,17 +102,17 @@ namespace SMSClient.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -144,10 +124,10 @@ namespace SMSClient.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -159,143 +139,73 @@ namespace SMSClient.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Course", b =>
-                {
-                    b.Property<string>("CourseCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Credits")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LongName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("CourseCode");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LongName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.DepartmentSemester", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("SemesterId");
-
-                    b.ToTable("DepartmentSemesters");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("SMSClient.Model.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -304,157 +214,206 @@ namespace SMSClient.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Semester", b =>
+            modelBuilder.Entity("SMSClient.Model.Class", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("SMSClient.Model.Course", b =>
+                {
+                    b.Property<string>("CourseCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LongName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT");
+                    b.HasKey("CourseCode");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ClassId");
 
-                    b.ToTable("Semesters");
+                    b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.SemesterCourse", b =>
+            modelBuilder.Entity("SMSClient.Model.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<string>("CourseCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseCode");
-
-                    b.HasIndex("SemesterId");
-
-                    b.ToTable("SemesterCourses");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("INTEGER");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LongName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("SMSClient.Model.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SemesterId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("ClassId");
 
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.UserInfo", b =>
+            modelBuilder.Entity("SMSClient.Model.Teacher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("SMSClient.Model.UserInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("UserInfos");
-                });
-
-            modelBuilder.Entity("CourseSemester", b =>
-                {
-                    b.HasOne("SMSClient.Models.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMSClient.Models.Semester", null)
-                        .WithMany()
-                        .HasForeignKey("SemestersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DepartmentSemester", b =>
-                {
-                    b.HasOne("SMSClient.Models.Department", null)
-                        .WithMany()
-                        .HasForeignKey("DepartmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMSClient.Models.Semester", null)
-                        .WithMany()
-                        .HasForeignKey("SemestersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -468,7 +427,7 @@ namespace SMSClient.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", null)
+                    b.HasOne("SMSClient.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -477,7 +436,7 @@ namespace SMSClient.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", null)
+                    b.HasOne("SMSClient.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -492,7 +451,7 @@ namespace SMSClient.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", null)
+                    b.HasOne("SMSClient.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -501,122 +460,91 @@ namespace SMSClient.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", null)
+                    b.HasOne("SMSClient.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Course", b =>
+            modelBuilder.Entity("SMSClient.Model.Class", b =>
                 {
-                    b.HasOne("SMSClient.Models.Department", "Department")
+                    b.HasOne("SMSClient.Model.Department", "Department")
+                        .WithMany("Classes")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("SMSClient.Model.Course", b =>
+                {
+                    b.HasOne("SMSClient.Model.Class", "Class")
                         .WithMany("Courses")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("ClassId");
 
-                    b.Navigation("Department");
+                    b.Navigation("Class");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.DepartmentSemester", b =>
+            modelBuilder.Entity("SMSClient.Model.Student", b =>
                 {
-                    b.HasOne("SMSClient.Models.Department", "Department")
-                        .WithMany("DepartmentSemesters")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMSClient.Models.Semester", "Semester")
-                        .WithMany("DepartmentSemesters")
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Semester");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.SemesterCourse", b =>
-                {
-                    b.HasOne("SMSClient.Models.Course", "Course")
-                        .WithMany("SemesterCourses")
-                        .HasForeignKey("CourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMSClient.Models.Semester", "Semester")
-                        .WithMany("SemesterCourses")
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Semester");
-                });
-
-            modelBuilder.Entity("SMSClient.Models.Student", b =>
-                {
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", "ApplicationUser")
+                    b.HasOne("SMSClient.Model.ApplicationUser", "ApplicationUser")
                         .WithOne("Student")
-                        .HasForeignKey("SMSClient.Models.Student", "ApplicationUserId");
+                        .HasForeignKey("SMSClient.Model.Student", "ApplicationUserId");
 
-                    b.HasOne("SMSClient.Models.Department", "Department")
+                    b.HasOne("SMSClient.Model.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("SMSClient.Models.Semester", "Semester")
-                        .WithMany("Students")
-                        .HasForeignKey("SemesterId");
+                        .HasForeignKey("ClassId");
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Department");
-
-                    b.Navigation("Semester");
+                    b.Navigation("Class");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.UserInfo", b =>
+            modelBuilder.Entity("SMSClient.Model.Teacher", b =>
                 {
-                    b.HasOne("SMSClient.Models.Identity.ApplicationUser", "ApplicationUser")
+                    b.HasOne("SMSClient.Model.ApplicationUser", "ApplicationUser")
+                        .WithOne("Teacher")
+                        .HasForeignKey("SMSClient.Model.Teacher", "ApplicationUserId");
+
+                    b.HasOne("SMSClient.Model.Class", "Class")
+                        .WithMany("Teachers")
+                        .HasForeignKey("ClassId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("SMSClient.Model.UserInfo", b =>
+                {
+                    b.HasOne("SMSClient.Model.ApplicationUser", "ApplicationUser")
                         .WithOne("UserInfo")
-                        .HasForeignKey("SMSClient.Models.UserInfo", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SMSClient.Model.UserInfo", "ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Course", b =>
+            modelBuilder.Entity("SMSClient.Model.ApplicationUser", b =>
                 {
-                    b.Navigation("SemesterCourses");
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
+
+                    b.Navigation("UserInfo");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Department", b =>
+            modelBuilder.Entity("SMSClient.Model.Class", b =>
                 {
                     b.Navigation("Courses");
 
-                    b.Navigation("DepartmentSemesters");
-
                     b.Navigation("Students");
+
+                    b.Navigation("Teachers");
                 });
 
-            modelBuilder.Entity("SMSClient.Models.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("SMSClient.Model.Department", b =>
                 {
-                    b.Navigation("Student")
-                        .IsRequired();
-
-                    b.Navigation("UserInfo")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SMSClient.Models.Semester", b =>
-                {
-                    b.Navigation("DepartmentSemesters");
-
-                    b.Navigation("SemesterCourses");
-
-                    b.Navigation("Students");
+                    b.Navigation("Classes");
                 });
 #pragma warning restore 612, 618
         }

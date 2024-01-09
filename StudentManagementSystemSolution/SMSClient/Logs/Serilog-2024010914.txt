@@ -1,0 +1,21 @@
+2024-01-09 14:34:14.023 +05:45 [INF] Successfully updated the course
+2024-01-09 14:35:57.633 +05:45 [INF] Successfully updated the course
+2024-01-09 14:36:14.595 +05:45 [INF] Successfully updated the course
+2024-01-09 14:36:59.764 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:02.441 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:04.248 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:07.016 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:10.292 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:13.983 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:19.847 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:30.887 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:36.277 +05:45 [INF] Successfully updated the course
+2024-01-09 14:37:39.895 +05:45 [INF] Successfully updated the course
+2024-01-09 14:39:52.307 +05:45 [INF] Successfully updated the role
+2024-01-09 14:40:15.281 +05:45 [INF] New Role Created
+2024-01-09 14:40:18.959 +05:45 [INF] Successfully updated the role
+2024-01-09 14:41:01.517 +05:45 [INF] Successfully created the user
+2024-01-09 14:42:13.573 +05:45 [INF] Successfully create the role
+2024-01-09 14:42:17.938 +05:45 [INF] Successfully deleted the user
+2024-01-09 14:57:22.615 +05:45 [INF] Successfully created the user
+2024-01-09 14:57:32.637 +05:45 [INF] Successfully deleted the user

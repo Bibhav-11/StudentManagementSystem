@@ -1,0 +1,23 @@
+2024-01-08 13:12:05.731 +05:45 [INF] Successfully updated the course
+2024-01-08 13:12:18.784 +05:45 [INF] Added new course
+2024-01-08 13:12:25.394 +05:45 [ERR] Could not delete semesterAn error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 13:12:25.820 +05:45 [ERR] Could not delete semesterAn error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 13:12:26.027 +05:45 [ERR] Could not delete semesterAn error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 13:12:28.718 +05:45 [ERR] Could not delete semesterAn error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 13:14:16.370 +05:45 [INF] Successfully deleted the semester
+2024-01-08 13:14:41.501 +05:45 [INF] New Class created
+2024-01-08 13:14:49.001 +05:45 [INF] Successfully created the semester
+2024-01-08 13:15:03.665 +05:45 [INF] Added new course
+2024-01-08 13:15:17.687 +05:45 [INF] New Teacher created
+2024-01-08 13:15:21.526 +05:45 [INF] Successfully updated the student
+2024-01-08 13:15:24.876 +05:45 [INF] Successfully deleted the semester
+2024-01-08 13:55:09.464 +05:45 [INF] Successfully updated the student
+2024-01-08 13:55:28.350 +05:45 [INF] Successfully updated the student
+2024-01-08 13:55:36.535 +05:45 [INF] Successfully updated the student
+2024-01-08 13:56:00.007 +05:45 [INF] Successfully deleted the user
+2024-01-08 13:56:20.224 +05:45 [INF] Successfully updated the student
+2024-01-08 13:56:25.665 +05:45 [INF] Successfully deleted the user
+2024-01-08 13:57:25.305 +05:45 [INF] New Department Created
+2024-01-08 13:57:42.244 +05:45 [INF] New Class created
+2024-01-08 13:58:01.614 +05:45 [INF] Successfully created the semester
+2024-01-08 13:58:11.835 +05:45 [INF] New Teacher created

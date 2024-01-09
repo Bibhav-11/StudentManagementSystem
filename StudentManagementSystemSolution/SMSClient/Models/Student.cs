@@ -31,7 +31,7 @@ namespace SMSClient.Models
         [ForeignKey("ApplicationUser")]
         public string? ApplicationUserId { get; set; }
 
-        public Department? Department { get; set; }
+        public Departments? Department { get; set; }
         public Semester? Semester { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
 

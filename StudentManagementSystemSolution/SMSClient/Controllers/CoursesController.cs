@@ -8,8 +8,9 @@ using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
 using SMSClient.Data.Identity;
-using SMSClient.Models;
+using SMSClient.Model;
 using SMSClient.Models.ViewModel;
+using SMSClient.Service.Classes;
 using SMSClient.Service.Courses;
 using SMSClient.Service.Departments;
 
@@ -18,10 +19,12 @@ namespace SMSClient.Controllers
     public class CoursesController: Controller
     {
         private readonly ICourseService _courseService;
+        private readonly IClassService _classService;
 
-        public CoursesController(ICourseService courseService)
+        public CoursesController(ICourseService courseService, IClassService classService)
         {
             _courseService = courseService;
+            _classService = classService;
         }
 
 
@@ -31,7 +34,7 @@ namespace SMSClient.Controllers
         {
             try
             {
-                var courses = await _courseService.GetCourses();
+                var courses = await _courseService.GetCoursesWithClassInfo();
                 return View(courses);
             }
             catch(Exception ex)
@@ -84,6 +87,21 @@ namespace SMSClient.Controllers
             }
         }
 
+        public async Task<IActionResult> ShowEditCourseModal(string courseCode)
+        {
+            try
+            {
+                var course = await _courseService.GetCourseById(courseCode);
+                if (course is null) return NotFound();
+                return PartialView("_EditCourseModal", course);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error while fetching course " + ex.Message);
+                throw;
+            }
+        }
+
         [CustomAuthorize(AccessLevels.Edit, Modules.Course)]
         [HttpPost]
         public async Task<IActionResult> EditCourse(Course courseForm)
@@ -95,6 +113,23 @@ namespace SMSClient.Controllers
                 return RedirectToAction("Index");
             }
             catch(Exception ex)
+            {
+                Log.Error("Error while updating the course " + ex.Message);
+                throw;
+            }
+        }
+
+        [CustomAuthorize(AccessLevels.Edit, Modules.Course)]
+        [HttpPost]
+        public async Task<JsonResult> AjaxUpdate(Course courseForm)
+        {
+            try
+            {
+                await _courseService.UpdateCourse(courseForm);
+                Log.Information("Successfully updated the course");
+                return Json(true);
+            }
+            catch (Exception ex)
             {
                 Log.Error("Error while updating the course " + ex.Message);
                 throw;
@@ -143,6 +178,13 @@ namespace SMSClient.Controllers
             var course = await _courseService.GetCourseById(courseCode);
             if (course is null) return Json(false);
             else return Json(true);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetClassesDropdown()
+        {
+            var classes = await _classService.GetClasses();
+            return PartialView("_ClassDropdown", classes);
         }
 
     }

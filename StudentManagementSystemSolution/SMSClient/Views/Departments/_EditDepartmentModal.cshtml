@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model SMSClient.Models.Department
+@model SMSClient.Model.Department
 
 
 <div class="modal fade" id="editDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -12,7 +12,7 @@
         <div class="modal-content">
             <form id="editDepartmentForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Update a User</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Update a Department</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -42,11 +42,16 @@
                             <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
                             <span class="text-danger" asp-validation-for="Email"></span>
                         </div>
+                        <div class="col-6">
+                            <label>Email</label>
+                            <input asp-for="Phone" class="form-control" id="phone" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="$(#editDepartmentModal).modal('hide')" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="saveEditDepartment" type="submit" class="btn btn-primary">Save changes</button>
                 </div>
 
@@ -81,6 +86,7 @@
             shortName: $("#shortName").val(),
             longName: $("#longName").val(),
             email: $("#email").val(),
+            phone: $("#phone").val(),
         }
         console.log(formData);
         $.ajax({

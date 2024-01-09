@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model SMSClient.Models.Student
+@model SMSClient.Model.Student
 
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -20,6 +20,7 @@
                         <div class="col-12">
                             @* <input asp-for="Id" class="form-control" id="userId" disabled />*@
                             @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.ApplicationUserId)
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -41,6 +42,11 @@
                             <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
                             <span class="text-danger" asp-validation-for="Email"></span>
                         </div>
+                        <div class="col-6">
+                            <label>Phone</label>
+                            <input asp-for="Phone" class="form-control" id="phone" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
                     </div>
                         <div class="row mt-2">
                                 <label>Date Of Birth</label>
@@ -50,13 +56,18 @@
                         </div>
 
                     <div class="row mt-2">
-                        <div class="col-6">
+                        @*<div class="col-6">
                             <label>Department</label>
                              <div data-value="@Model.DepartmentId" id="departmentDropdown"></div>
                         </div>
                         <div class="col-6">
                             <label>Semester</label>
                             <div data-value="@Model.SemesterId" id="semesterDropdown"></div>
+                        </div>*@
+
+                        <div class="col-6">
+                            <label>Class</label>
+                            <div data-value="@Model.ClassId" id="classDropdown"></div>
                         </div>
                     </div>
 
@@ -78,7 +89,7 @@
 }
 
 <script>
-    var date, department = $("#departmentDropdown").data("value"), semester = $("#semesterDropdown").data("value");
+    var date = $("#editStudentDOBContainer").data("value"), classId = $("#classDropdown").data("value");
     $('#editStudentDOBContainer').dxDateBox({
         placeholder: '10/16/2018',
         showClearButton: true,
@@ -92,25 +103,16 @@
         }
     });
 
-    $("#departmentDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetDepartments", "Students")',
-        displayExpr: "LongName",
+    $("#classDropdown").dxSelectBox({
+        dataSource: '@Url.Action("GetClasses", "Students")',
+        displayExpr: "Name",
         valueExpr: "Id",
-        value: $("#departmentDropdown").data("value"),
+        value: $("#classDropdown").data("value"),
         onValueChanged: function (e) {
-            department = e.value;
+            classId = e.value;
         }
     })
 
-    $("#semesterDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetSemesters", "Students")',
-        displayExpr: "LongName",
-        valueExpr: "Id",
-        value: $("#semesterDropdown").data("value"),
-        onValueChanged: function (e) {
-            semester = e.value;
-        }
-    })
 
     $("#editStudentForm").on('submit', function (e) {
         e.preventDefault();
@@ -130,9 +132,10 @@
             firstName: $("#firstName").val(),
             lastName: $("#lastName").val(),
             email: $("#email").val(),
+            phone: $("#phone").val(),
             dateOfBirth: date,
-            departmentId: department,
-            semesterId: semester,
+            classId: classId,
+            applicationUserId: $("#ApplicationUserId").val(),
         }
         console.log(formData);
         $.ajax({

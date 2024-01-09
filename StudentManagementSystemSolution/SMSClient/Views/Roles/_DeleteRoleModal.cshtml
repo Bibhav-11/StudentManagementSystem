@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IdentityRole
+
+
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+            <form id="deleteRoleForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Delete a Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Id</label>
+                            <span id="spanId" data-id="@Model.Id">@Model.Id</span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Name:</label>
+                            <span>@Model.Name</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="Save" type="submit" class="btn btn-primary">Delete User</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $("#deleteRoleForm").on('submit', function (e) {
+        e.preventDefault();
+        let id = $("#spanId").data("id");
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteRole", "Roles")',
+            data: { roleId: id },
+            dataType: "json",
+            success: function (result) {
+                if (result == true) $.notify("Successfully deleted", "success")
+                $("#deleteRoleModal").modal("hide")
+                location.reload();
+            },
+            error: function (ex) {
+                $.notify(ex)
+            }
+        })
+    })
+</script>

@@ -1,0 +1,10 @@
+2024-01-08 19:16:23.288 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 19:16:57.056 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 19:54:14.166 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:54:16.657 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:54:17.416 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:54:17.904 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:54:18.271 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:55:13.187 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:55:50.691 +05:45 [ERR] String '' was not recognized as a valid Boolean.
+2024-01-08 19:56:09.742 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).

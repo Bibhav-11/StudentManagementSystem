@@ -1,6 +1,7 @@
 ﻿using AttendanceAPI.DTO;
 using AttendanceAPI.Models;
 using AttendanceAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceAPI.Controllers
@@ -17,6 +18,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "teacher")]
         public async Task<IActionResult> GetAllAttendances()
         {
             var attendanceRecords = await _attendanceService.GetAllAsync();
@@ -25,6 +27,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "teacher")]
         public async Task<IActionResult> MarkAttendance([FromBody] AttendanceRecordRequest attendanceRecordRequest)
         {
             var attendanceRecord = attendanceRecordRequest.ToAttendanceRecord();
@@ -35,6 +38,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost("all")]
+        [Authorize(Roles = "teacher")]
         public async Task<IActionResult> CreateListOfAttendanceRecords([FromBody] IEnumerable<AttendanceRecordRequest> attendanceRecordRequests)
         {
             var attendanceRecords = attendanceRecordRequests.Select(x => x.ToAttendanceRecord());
@@ -43,13 +47,31 @@ namespace AttendanceAPI.Controllers
             return Ok(attendanceRecords);
         }
 
-        [HttpGet("{attendanceId}")]
-        public async Task<IActionResult> Get([FromRoute] int attendanceId)
+        [HttpGet("{studentId}")]
+        [Authorize]
+        public async Task<IActionResult> Get([FromRoute] int studentId)
         {
-            var attendanceRecord = await _attendanceService.GetAsync(attendanceId);
+            var attendanceRecord = await _attendanceService.GetAsync(studentId);
             if (attendanceRecord is null) return NotFound();
-            var attendanceRecordResponse = attendanceRecord.ToAttendanceRecordResponse();
-            return Ok(attendanceRecordResponse);
+            var attendanceRecordResponses = attendanceRecord.Select(x => x.ToAttendanceRecordResponse());
+            return Ok(attendanceRecordResponses);
+        }
+
+        [HttpGet("alreadyexists")]
+        [Authorize(Roles = "teacher")]
+        public async Task<IActionResult> AttendanceAlreadyExists()
+        {
+            var alreadyExists = await _attendanceService.CheckIfAlreadyExists();
+            return Ok(alreadyExists);
+        }
+
+        [Authorize(Roles ="teacher,student")]
+        [HttpGet("get")]
+        public async Task<IActionResult> GetAttendance([FromQuery] AttendanceRecordGetDTO attendanceRequests)
+        {
+            var attendanceRecords = await _attendanceService.GetAttendance(attendanceRequests);
+            var attendanceResponses = attendanceRecords.Select(x => x.ToAttendanceRecordResponse()).ToList();
+            return Ok(attendanceResponses);
         }
 
     }

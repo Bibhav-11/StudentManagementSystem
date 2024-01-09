@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SMSClient.Data.Identity;
-using SMSClient.Models;
+using SMSClient.Model;
 using SMSClient.Repository;
+using SMSClient.Repository.Courses;
 
 namespace SMSClient.Service.Courses
 {
     public class CourseService : ICourseService
     {
-        private readonly IRepository<Course> _courseRepository;
+        private readonly ICourseRepositiory _courseRepository;
         private readonly AspIdUsersContext _context;
 
-        public CourseService(IRepository<Course> courseRepository, AspIdUsersContext context)
+        public CourseService(ICourseRepositiory courseRepository, AspIdUsersContext context)
         {
             _courseRepository = courseRepository;
             _context = context;
@@ -21,15 +22,21 @@ namespace SMSClient.Service.Courses
             return await _courseRepository.GetAll();
         }
 
+        public async Task<IEnumerable<Course>> GetCoursesWithClassInfo()
+        {
+            return await _courseRepository.GetCourseWithClassInfo();
+        }
+
         public async Task<Course?> GetCourseById(string id)
         {
             return await _courseRepository.GetById(id);
         }
 
-        public Task<IEnumerable<Course>> GetUnassignedCoursesofDepartment()
+        public IEnumerable<Course> GetUnassignedCoursesofDepartment()
         {
-            var courses = _courseRepository.FindAll(c => c.DepartmentId == null);
-            return courses;
+            //var courses = _courseRepository.FindAll(c => c.DepartmentId == null);
+            return new List<Course>();
+            //return courses;
         }
 
 

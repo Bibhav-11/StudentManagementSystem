@@ -1,0 +1,35 @@
+2024-01-09 09:24:36.765 +05:45 [INF] Successfully updated the class
+2024-01-09 09:24:42.363 +05:45 [INF] Successfully updated the class
+2024-01-09 09:24:45.929 +05:45 [INF] Successfully updated the class
+2024-01-09 09:25:06.140 +05:45 [INF] Successfully updated the class
+2024-01-09 09:25:17.620 +05:45 [INF] Successfully updated the class
+2024-01-09 09:53:12.647 +05:45 [INF] New Role Created
+2024-01-09 09:53:41.875 +05:45 [INF] Successfully created the user
+2024-01-09 09:53:54.478 +05:45 [INF] Successfully updated the user
+2024-01-09 09:54:36.079 +05:45 [INF] Successfully create the role
+2024-01-09 09:54:41.148 +05:45 [INF] Successfully deleted the user
+2024-01-09 09:55:27.604 +05:45 [INF] New Department Created
+2024-01-09 09:55:48.566 +05:45 [INF] New Class created
+2024-01-09 09:55:54.093 +05:45 [INF] Successfully updated the class
+2024-01-09 09:56:01.780 +05:45 [INF] Successfully deleted the semester
+2024-01-09 09:56:23.663 +05:45 [INF] Added new course
+2024-01-09 09:56:30.427 +05:45 [INF] Successfully updated the course
+2024-01-09 09:56:33.455 +05:45 [INF] Successfully updated the course
+2024-01-09 09:56:35.897 +05:45 [INF] Successfully deleted the department
+2024-01-09 09:57:04.590 +05:45 [INF] Successfully created the semester
+2024-01-09 09:57:12.967 +05:45 [INF] Successfully updated the student
+2024-01-09 09:57:21.395 +05:45 [INF] Successfully updated the student
+2024-01-09 09:57:24.815 +05:45 [INF] Successfully updated the student
+2024-01-09 09:57:51.984 +05:45 [INF] Successfully updated the student
+2024-01-09 09:57:54.567 +05:45 [INF] Successfully updated the student
+2024-01-09 09:57:57.755 +05:45 [INF] Successfully updated the student
+2024-01-09 09:58:10.587 +05:45 [INF] Successfully updated the student
+2024-01-09 09:58:14.142 +05:45 [INF] Successfully updated the student
+2024-01-09 09:58:50.683 +05:45 [INF] Successfully updated the student
+2024-01-09 09:58:52.668 +05:45 [INF] Successfully updated the student
+2024-01-09 09:59:13.097 +05:45 [INF] New Teacher created
+2024-01-09 09:59:18.157 +05:45 [INF] Teacher updated
+2024-01-09 09:59:24.310 +05:45 [INF] Teacher updated
+2024-01-09 09:59:29.818 +05:45 [INF] Teacher updated
+2024-01-09 09:59:34.013 +05:45 [INF] Successfully deleted the student
+2024-01-09 09:59:38.200 +05:45 [INF] Successfully deleted the student

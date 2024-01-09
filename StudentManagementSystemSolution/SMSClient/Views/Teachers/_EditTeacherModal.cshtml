@@ -1,0 +1,142 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Model.Teacher
+
+<div class="modal fade" id="editTeacherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="editTeacherForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit a Teacher</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            @* <input asp-for="Id" class="form-control" id="userId" disabled />*@
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.ApplicationUserId)
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>First Name</label>
+                            <input asp-for="FirstName" class="form-control" id="firstName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="FirstName"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>Last Name</label>
+                            <input asp-for="LastName" class="form-control" id="lastName" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="LastName"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                        <div class="col-6">
+                            <label>Phone</label>
+                            <input asp-for="Phone" class="form-control" id="phone" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        @*<div class="col-6">
+                        <label>Department</label>
+                        <div data-value="@Model.DepartmentId" id="departmentDropdown"></div>
+                        </div>
+                        <div class="col-6">
+                        <label>Semester</label>
+                        <div data-value="@Model.SemesterId" id="semesterDropdown"></div>
+                        </div>*@
+
+                        <div class="col-6">
+                            <label>Class</label>
+                            <div data-value="@Model.ClassId" id="classDropdown"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="saveEditDepartment" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+    var classId = $("#classDropdown").data("value");
+
+
+    $("#classDropdown").dxSelectBox({
+        dataSource: '@Url.Action("GetClasses", "Students")',
+        displayExpr: "Name",
+        valueExpr: "Id",
+        value: $("#classDropdown").data("value"),
+        onValueChanged: function (e) {
+            classId = e.value;
+        }
+    })
+
+
+    $("#editTeacherForm").on('submit', function (e) {
+        e.preventDefault();
+        $.validator.unobtrusive.parse('#editTeacherForm');
+        $("#editTeacherForm").validate();
+
+        if (!$("#editTeacherForm").valid()) {
+            $.notify("Not valid");
+            return;
+        }
+        $("#Save").prop("disabled", true);
+        $("#Save").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+        let formData = {
+            id: $("#Id").val(),
+            firstName: $("#firstName").val(),
+            lastName: $("#lastName").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val(),
+            classId: classId,
+            applicationUserId: $("#ApplicationUserId").val(),
+        }
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            data: formData,
+            url: '@Url.Action("AjaxUpdate", "Teachers")',
+            success: function (response) {
+                if (response == true) {
+                    $.notify("Teahcer Updated Successfully", "success");
+                    $("#editTeacherModal").modal("hide");
+                    location.reload();
+                }
+                else $.notify("Sorry some error occurred");
+
+            },
+            error: function (e) {
+                $.notify(e.message);
+            }
+        })
+
+    })
+</script>

@@ -229,7 +229,7 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="rolesMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Role" asp-action="Index" asp-controller="Roles" class="nav-link px-0"> <span class="d-none d-sm-inline">View Roles</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Role" asp-action="Index" asp-controller="Roles" class="nav-link px-0"> <span class="d-none d-sm-inline">View Roles</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -239,7 +239,7 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="usersMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.User" asp-action="Index" asp-controller="Users" class="nav-link px-0"> <span class="d-none d-sm-inline">View Users</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.User" asp-action="Index" asp-controller="Users" class="nav-link px-0"> <span class="d-none d-sm-inline">View Users</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -249,17 +249,17 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="departmentMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Department" asp-action="Index" asp-controller="Departments" class="nav-link px-0"> <span class="d-none d-sm-inline">View Department</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Department" asp-action="Index" asp-controller="Departments" class="nav-link px-0"> <span class="d-none d-sm-inline">View Department</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a asp-hasanyaccessmodule="@Modules.Semester" href="#semesterMenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Semesters</span>
+                            <a asp-hasanyaccessmodule="@Modules.Class" href="#classMenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Classes</span>
                             </a>
-                            <ul class="collapse nav flex-column ms-1" id="semesterMenu" data-bs-parent="#menu">
+                            <ul class="collapse nav flex-column ms-1" id="classMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Semester" asp-action="Index" asp-controller="Semesters" class="nav-link px-0"> <span class="d-none d-sm-inline">View Semester</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Class" asp-action="Index" asp-controller="Classes" class="nav-link px-0"> <span class="d-none d-sm-inline">View Class</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -269,7 +269,7 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="coursesMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Course" asp-action="Index" asp-controller="Courses" class="nav-link px-0"> <span class="d-none d-sm-inline">View Courses</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Course" asp-action="Index" asp-controller="Courses" class="nav-link px-0"> <span class="d-none d-sm-inline">View Courses</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -279,10 +279,54 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="studentsMenu" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Student" asp-action="Index" asp-controller="Students" class="nav-link px-0"> <span class="d-none d-sm-inline">View Students</span> 1 </a>
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Student" asp-action="Index" asp-controller="Students" class="nav-link px-0"> <span class="d-none d-sm-inline">View Students</span></a>
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <a asp-hasanyaccessmodule="@Modules.Teacher" href="#teachersMenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Teachers</span>
+                            </a>
+                            <ul class="collapse nav flex-column ms-1" id="teachersMenu" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a asp-accesslevel="@AccessLevels.View" asp-module="@Modules.Teacher" asp-action="Index" asp-controller="Teachers" class="nav-link px-0"> <span class="d-none d-sm-inline">View Teachers</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        @if(User.IsInRole("student") || User.IsInRole("teacher"))
+                        {
+                            <li>
+                                <a href="#attendanceMenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Attendances</span>
+                                </a>
+
+                                <ul class="collapse nav flex-column ms-1" id="attendanceMenu" data-bs-parent="#menu">
+                                    @if (User.IsInRole("teacher"))
+                                    {
+                                        <li class="w-100">
+                                            <a asp-action="Create" asp-controller="Attendances" class="nav-link px-0"> <span class="d-none d-sm-inline">Take Attendance</span></a>
+                                        </li>
+                                        <li class="w-100">
+                                            <a asp-action="Index" asp-controller="Attendances" class="nav-link px-0"> <span class="d-none d-sm-inline">View Class Attendances</span></a>
+                                        </li>
+                                        <li class="w-100">
+                                            <a asp-action="StudentAttendance" asp-controller="Attendances" class="nav-link px-0"> <span class="d-none d-sm-inline">View Student Attendances</span></a>
+                                        </li>
+                                    }
+
+                                    @if (User.IsInRole("student"))
+                                    {
+                                        <li class="w-100">
+                                            <a asp-action="MyAttendance" asp-controller="Attendances" class="nav-link px-0"> <span class="d-none d-sm-inline">View Attendance</span></a>
+                                        </li>
+                                    }
+                                    </ul>                                    
+                             
+                            </li>
+                        }
+                        
+
                     </ul>
                     <hr>
                     <div class="dropdown pb-4">

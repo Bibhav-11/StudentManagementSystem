@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model SMSClient.Models.Department
+@model SMSClient.Model.Department
 
 <div class="modal fade" id="deleteDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -11,7 +11,7 @@
         <div class="modal-content">
             <form id="deleteDepartmentForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Delete a User</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Delete a Department</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -25,21 +25,25 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-6">
-                            <label>Short Name</label>
+                        <div class="col-12">
+                            <label>Short Name:</label>
                             <span>@Model.ShortName</span>
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-6">
-                            <label>Long Name</label>
+                        <div class="col-12">
+                            <label>Long Name:</label>
                             <span>@Model.LongName</span>
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-6">
-                            <label>Email</label>
+                            <label>Email:</label>
                             <span>@Model.Email</span>
+                        </div>
+                        <div class="col-6">
+                            <label>Phone:</label>
+                            <span>@Model.Phone</span>
                         </div>
                     </div>
 

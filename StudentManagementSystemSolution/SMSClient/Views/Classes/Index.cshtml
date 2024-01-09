@@ -1,0 +1,105 @@
+﻿@using SMSClient.Constants;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<SMSClient.Model.Class>
+
+<h2>Classes</h2>
+<div asp-accesslevel="@AccessLevels.Create" asp-module="@Modules.Class" style="display: flex; justify-content: end; margin-bottom: 20px">
+    @Html.DevExtreme().Button().Text("Create a Class").OnClick("navigateToCreateSemesters")
+</div>
+
+
+<div style="margin-top: 10px">
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Start Period
+                </th>
+                <th>
+                    End Period
+                </th>
+                <th>
+                    Department
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>
+                        @obj.Id
+                    </td>
+                    <td>
+                        @obj.Name
+                    </td>
+                    <td>
+                        @obj.StartDate
+                    </td>
+                    <td>
+                        @obj.EndDate
+                    </td>
+                    <td>
+                        @if (@obj.Department is null) { }
+                        else
+                            @obj.Department.LongName
+                        </td>
+                    <td>
+                        <div class="d-flex" role="group">
+                            <button id="@obj.Id" onclick="showEditDepartmentModal(this.id);" asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.Class" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</button>
+                            <button id="@obj.Id" onclick="showDeleteDepartmentModal(this.id);" asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.Class" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<div id="editClassModalContainer"></div>
+<div id="deleteClassModalContainer"></div>
+
+<script>
+    function navigateToCreateSemesters() {
+        window.location.href = '@Url.Action("Create")'
+    }
+
+    function showEditDepartmentModal(id) {
+        $.ajax({
+            type: "GET",
+            cache: false,
+            data: { id: id },
+            url: '@Url.Action("ShowEditPage", "CLasses")',
+            success: function (response) {
+                $("#editClassModalContainer").html(response);
+                $("#editClassModal").modal("show");
+            }
+        })
+    }
+
+    function showDeleteDepartmentModal(id) {
+        $.ajax({
+            type: "GET",
+            data: { id: id },
+            url: '@Url.Action("ShowDeletePage", "Classes")',
+            success: function (response) {
+                $("#deleteClassModalContainer").html(response);
+                $("#deleteClassModal").modal("show");
+            }
+        })
+    }
+</script>

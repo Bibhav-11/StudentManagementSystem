@@ -85,3 +85,4 @@ D:\Student Management System\StudentManagementSystemSolution\AttendanceAPI\bin\D
 D:\Student Management System\StudentManagementSystemSolution\AttendanceAPI\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 D:\Student Management System\StudentManagementSystemSolution\AttendanceAPI\bin\Debug\net6.0\System.Text.Json.dll
 D:\Student Management System\StudentManagementSystemSolution\AttendanceAPI\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+D:\Student Management System\StudentManagementSystemSolution\AttendanceAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

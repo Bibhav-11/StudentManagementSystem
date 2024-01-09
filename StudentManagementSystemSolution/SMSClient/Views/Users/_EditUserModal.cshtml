@@ -8,7 +8,7 @@
 *@
 @{
 }
-@model SMSClient.Models.ViewModel.UserEditViewModel
+@model SMSClient.Model.UserEditViewModel
 
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -52,10 +52,13 @@
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-6">
-                            <label>Date Of Birth</label>
-                            <input asp-for="DateOfBirth" class="form-control" id="dateOfBirth" type="text" autocomplete="off" />
-                            <span class="text-danger" asp-validation-for="DateOfBirth"></span>
+                        <div class="col-12">
+                            <label id="">Date of Birth</label>
+                            <div class="dx-field">
+                                <div class="dx-field-value">
+                                    <div data-val="@Model.DateOfBirth" id="userEditDob"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -77,6 +80,20 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
 <script>
+
+    $('#userEditDob').dxDateBox({
+        placeholder: '10/16/2018',
+        showClearButton: true,
+        useMaskBehavior: true,
+        displayFormat: 'shortdate',
+        value: '@Model.DateOfBirth',
+        type: 'date',
+        inputAttr: { 'aria-label': 'Date' },
+        onValueChanged: function (e) {
+            date = e.value;
+        }
+    });
+
     var error = false;
     $("#userName").on("change", function () {
         let userName = $("#userName").val();

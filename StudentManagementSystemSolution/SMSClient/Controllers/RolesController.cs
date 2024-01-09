@@ -102,6 +102,16 @@ namespace SMSClient.Controllers
         }
 
         [CustomAuthorize(AccessLevels.Delete, Modules.Role)]
+        [HttpGet]
+        public async Task<IActionResult> Delete(string? roleId)
+        {
+            if (roleId == null) return NotFound();
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role == null) return NotFound();
+            return PartialView("_DeleteRoleModal", role);
+        }
+
+        [CustomAuthorize(AccessLevels.Delete, Modules.Role)]
         public async Task<IActionResult> DeleteRole(string roleId)
         {
             try
@@ -109,7 +119,7 @@ namespace SMSClient.Controllers
                 var role = await _roleManager.FindByIdAsync(roleId);
                 await _roleManager.DeleteAsync(role);
                 Log.Information("Successfully create the role");
-                return RedirectToAction("Index");
+                return Json(true);
             }
             catch(Exception ex)
             {

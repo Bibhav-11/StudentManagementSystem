@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SMSClient.Data.Identity;
-using SMSClient.Models;
-using SMSClient.Models.Identity;
-using SMSClient.Models.ViewModel;
+using SMSClient.Model;
 using SMSClient.Repository.Students;
+using SMSClient.Service.Students;
+using SMSClient.Service.Teahcers;
+using System.Security.Claims;
 
 namespace SMSClient.Service.Users
 {
@@ -13,13 +14,17 @@ namespace SMSClient.Service.Users
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IStudentRepository _studentRepository;
+        private readonly IStudentService _studentService;
+        private readonly ITeacherService _teacherService;
         private readonly AspIdUsersContext _context;
 
-        public UsersService(UserManager<ApplicationUser> userManager, AspIdUsersContext context, IStudentRepository studentRepository)
+        public UsersService(UserManager<ApplicationUser> userManager, AspIdUsersContext context, IStudentRepository studentRepository, ITeacherService teacherService, IStudentService studentService)
         {
             _userManager = userManager;
             _context = context;
             _studentRepository = studentRepository;
+            _teacherService = teacherService;
+            _studentService = studentService;
         }
 
         public List<ApplicationUser> GetAllUsers()
@@ -88,19 +93,23 @@ namespace SMSClient.Service.Users
 
             if (await _userManager.IsInRoleAsync(user, "student"))
             {
-                var students = await _studentRepository.GetStudentsWithDepartmentAndSemesterInfo();
+                var students = await _studentRepository.GetAll();
                 var student = students.FirstOrDefault(s => s.ApplicationUserId == userId);
                 var studentInfo = new List<string>();
                 if (student != null)
                 {
-                    if (student.Department != null) studentInfo.Add($"Department: {student.Department.LongName}");
-                    if (student.Semester != null) studentInfo.Add($"Semester: {student.Semester.LongName}");
+                    studentInfo.Add($"FirstName: {student.FirstName}");
+                    studentInfo.Add($"LastName: {student.LastName}");
+                    studentInfo.Add($"Email: {student.Email}");
+                    studentInfo.Add($"Phone: {student.Phone}");
+                    studentInfo.Add($"DateOfBirth: {student.DateOfBirth}");
                 };
                 var studentResult = new { key = "StudentTable", items = studentInfo };
                 results.Add(studentResult);
             }
             return results;
         }
+
 
         public async Task<bool> CreateUserAsync(UserFormViewModel userForm)
         {
@@ -195,6 +204,19 @@ namespace SMSClient.Service.Users
         public async Task DeleteUserAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
+            if (await _userManager.IsInRoleAsync(user, "student"))
+            {
+                var student = await _studentService.GetStudentByUserId(userId);
+                await _studentService.DeleteStudent(student);
+                return;
+            }
+
+            if(await _userManager.IsInRoleAsync(user, "teacher"))
+            {
+                var teacher = await _teacherService.GetTeacherByUserId(userId);
+                await _teacherService.DeleteTeacher(teacher);
+                return;
+            }
 
             if (user is null) { return; }
             var roles = await _userManager.GetRolesAsync(user);
@@ -203,6 +225,11 @@ namespace SMSClient.Service.Users
             if (userInfo != null) _context.UserInfos.Remove(userInfo);
             var result2 = await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user)
+        {
+            return await _userManager.GetUserAsync(user);
         }
     }
 }

@@ -9,14 +9,21 @@ using Serilog;
 using SMSClient.Authentication.AuthorizationHandlers;
 using SMSClient.Client;
 using SMSClient.Data.Identity;
-using SMSClient.Models.Identity;
+using SMSClient.Model;
 using SMSClient.Repository;
 using SMSClient.Repository.Students;
 using SMSClient.Service.Courses;
 using SMSClient.Service.Departments;
-using SMSClient.Service.Semesters;
+using SMSClient.Service.Classes;
 using SMSClient.Service.Students;
 using SMSClient.Service.Users;
+using SMSClient.Service.Teahcers;
+using SMSClient.Repository.Departments;
+using SMSClient.Repository.Classes;
+using SMSClient.Service.Attendances;
+using Microsoft.Extensions.Configuration;
+using SMSClient.Repository.Courses;
+using SMSClient.Repository.Teachers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +39,7 @@ Log.Logger = new LoggerConfiguration().WriteTo.File("Logs/Serilog-.txt", rolling
 
 
 builder.Services.AddDbContext<AspIdUsersContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //builder.Services.AddDefaultIdentity<ApplicationUser, IdentityRole>()
 //    .AddEntityFrameworkStores<AspIdUsersContext>();
@@ -45,12 +52,22 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 
 //Repository/Service
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IClassRepository, ClassRepository>();
+builder.Services.AddScoped<ICourseRepositiory, CourseRepository>();
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();    
+builder.Services.AddScoped<IClassService, ClassService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<ISemesterService, SemesterService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+
+
+//Attendance
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();    
+
 
 //Authorization Handler
 builder.Services.AddSingleton<IAuthorizationHandler, HasAccessPermissionAuthorizationHandler>();
@@ -85,8 +102,9 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("profile");
         options.Scope.Add("roles");
         options.Scope.Add("permissions");
-        //options.Scope.Add("scope1");
+        options.Scope.Add("attendance.full_access");
     });
+
 
 
 

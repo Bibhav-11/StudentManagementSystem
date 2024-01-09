@@ -1,0 +1,18 @@
+﻿@using SMSClient.Model.ApiModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<SMSClient.Model.ApiModel.AttendanceList>
+
+@(
+Html.DevExtreme().DataGrid<AttendanceList>().DataSource(Model).ShowBorders(true).Columns(c =>
+{
+    c.AddFor(m => m.Student);
+    c.AddFor(m => m.MarkedBy);
+    c.AddFor(m => m.Date);
+    c.AddFor(m => m.Status);
+})
+)

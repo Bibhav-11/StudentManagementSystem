@@ -2,7 +2,7 @@
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using IdentityModel;
-using IdentityServer.Data.Migrations;
+//using IdentityServer.Data.Migrations;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
 

@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "oO8q28O8o5eVLTkNyfEodwlcav7MAR4sXOQwmZwgoBz6eVjHTxnErIE4GDLcIHFIPequ9zM85d8bmG/wbrMauw==",
+  "dgSpecHash": "jZzORxG3UH5q3CRMLP4Gm2ZWI4jRTnbmEBohw++BCMJ6wYHHOSUZB5V3ITCm23Ne+aenQudj5aOhfFdgSf+4WQ==",
   "success": true,
   "projectFilePath": "D:\\Student Management System\\StudentManagementSystemSolution\\AttendanceAPI\\AttendanceAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bibhav\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.0\\microsoft.aspnetcore.authentication.jwtbearer.6.0.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",

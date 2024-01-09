@@ -1,22 +1,21 @@
-﻿@*
+﻿@using SMSClient.Model.ApiModel;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
-@model IEnumerable<SMSClient.Models.Student>
+@model IEnumerable<SMSClient.Model.ApiModel.AttendanceList>
 
 
-@(
-Html.DevExtreme().DataGrid<SMSClient.Models.Student>().DataSource(Model, "Id").ID("attendanceCreateDataGrid").Selection(s =>
+@* @(
+Html.DevExtreme().DataGrid<SMSClient.Model.Student>().DataSource(Model, "Id").ID("attendanceCreateDataGrid").Selection(s =>
 {
     s.Mode(SelectionMode.Multiple);
 }).Columns(c =>
 {
     c.AddFor(m => m.FirstName);
     c.AddFor(m => m.LastName);
-    c.AddFor(m => m.SemesterId);
-    c.AddFor(m => m.DepartmentId);
 
      c.Add().MinWidth(150).Type(GridCommandColumnType.Selection).Caption("Hello");
 }).OnSelectionChanged("addSelectedStudents").OnCellPrepared("setLabelToCheckBox")
@@ -41,7 +40,7 @@ Html.DevExtreme().DataGrid<SMSClient.Models.Student>().DataSource(Model, "Id").I
     }
 
     function addAttendanceRecord() {
-        $.ajax({
+        $.ajax({ 
             url: '@Url.Action("CreateAttendance", "Attendances")',
             type: "POST",
             data: { studentIds: selectedStudents },
@@ -64,3 +63,16 @@ Html.DevExtreme().DataGrid<SMSClient.Models.Student>().DataSource(Model, "Id").I
 
 
 </script>
+*@
+
+<h3>Attendance List</h3>
+
+@(
+Html.DevExtreme().DataGrid<AttendanceList>().DataSource(Model).ShowBorders(true).Columns(c =>
+{
+    c.AddFor(m => m.Student);
+    c.AddFor(m => m.MarkedBy);
+    c.AddFor(m => m.Date);
+    c.AddFor(m => m.Status);
+})
+)

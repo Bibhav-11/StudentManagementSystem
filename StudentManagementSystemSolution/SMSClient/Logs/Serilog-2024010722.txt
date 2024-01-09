@@ -1,0 +1,5 @@
+2024-01-07 22:08:41.742 +05:45 [INF] New Role Created
+2024-01-07 22:34:06.253 +05:45 [INF] New Department Created
+2024-01-07 22:37:13.901 +05:45 [INF] Successfully updated the department
+2024-01-07 22:39:08.711 +05:45 [INF] Successfully deleted the department
+2024-01-07 22:43:26.144 +05:45 [INF] New Department Created

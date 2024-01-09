@@ -12,7 +12,7 @@ namespace SMSClient.Models
         [ForeignKey("Semester")]
         public int SemesterId { get; set; }
 
-        public Department Department { get; set; } = null!;
+        public Departments Department { get; set; } = null!;
         public Semester Semester { get; set; } = null!;
 
     }

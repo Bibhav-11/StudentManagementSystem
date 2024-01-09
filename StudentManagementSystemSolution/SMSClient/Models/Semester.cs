@@ -17,7 +17,7 @@ namespace SMSClient.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public List<Department> Departments { get; } = new List<Department>();
+        public List<Departments> Departments { get; } = new List<Departments>();
         public List<Course> Courses { get; } = new List<Course>();
         public List<DepartmentSemester> DepartmentSemesters { get; } = new List<DepartmentSemester>();
         public List<SemesterCourse> SemesterCourses { get; } = new List<SemesterCourse>();

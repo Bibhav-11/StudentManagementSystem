@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SMSClient.Authentication;
 using SMSClient.Client;
-using SMSClient.Models;
-using SMSClient.Models.Identity;
+using SMSClient.Model;
 using SMSClient.Repository;
 using SMSClient.Service.Courses;
 using SMSClient.Service.Users;
@@ -22,16 +21,20 @@ namespace SMSClient.Controllers
         private readonly IUsersService _usersService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public HomeController(ILogger<HomeController> logger, IUsersService usersService, UserManager<ApplicationUser> userManager, ICourseService courseService)
+        public HomeController(IUsersService usersService, UserManager<ApplicationUser> userManager)
         {
             _usersService = usersService;
             this.userManager = userManager;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
+            ViewBag.AccessToken = await HttpContext.GetTokenAsync("access_token");
+
             var user = await userManager.GetUserAsync(HttpContext.User);
+            var isStudent = await userManager.IsInRoleAsync(user, "student");
             var userInfo = await _usersService.GetAdditionalInfo(user.Id);
             return View(userInfo);
         }

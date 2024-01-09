@@ -1,4 +1,5 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.DTO;
+using AttendanceAPI.Models;
 using AttendanceAPI.Repository;
 
 namespace AttendanceAPI.Service
@@ -62,7 +63,7 @@ namespace AttendanceAPI.Service
             }
         }
 
-        public async Task<AttendanceRecord?> GetAsync(int id)
+        public async Task<IEnumerable<AttendanceRecord>> GetAsync(int id)
         {
             try
             {
@@ -84,6 +85,17 @@ namespace AttendanceAPI.Service
             {
                 throw;
             }
+        }
+
+        public async Task<bool> CheckIfAlreadyExists()
+        {
+            return await _recordRepository.CheckIfAlreadyExists();
+        }
+
+
+        public async Task<IEnumerable<AttendanceRecord>> GetAttendance(AttendanceRecordGetDTO attendanceRequests)
+        {
+            return await _recordRepository.GetAttendance(attendanceRequests);
         }
     }
 }

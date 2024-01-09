@@ -1,0 +1,32 @@
+﻿@using SMSClient.Model.ApiModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<h3>Select Student</h3>
+
+@Html.DevExtreme().SelectBox().ID("studentId").DataSource(d => d.Mvc().LoadAction("GetStudents")).ValueExpr("Id").DisplayExpr("FirstName")
+
+<div style="margin: 25px 0">
+@Html.DevExtreme().Button().Text("List Student Attendance").OnClick("searchStudentAttendance")
+</div>
+
+@(Html.DevExtreme().DataGrid<AttendanceList>().ID("studentsList").DataSource(d => d.Mvc().LoadAction("ListStudents").LoadParams(new { studentId = new JS("function() { return studentId; }") })).Columns(c => {
+    c.AddFor(m => m.Student);
+    c.AddFor(m => m.MarkedBy);
+    c.AddFor(m => m.Date);
+    c.AddFor(m => m.Status);
+}))
+
+
+<script>
+    var studentId;
+    function searchStudentAttendance() {
+        studentId = $("#studentId").dxSelectBox("option", "value");
+        $("#studentsList").dxDataGrid("getDataSource").reload()
+    }
+</script>
+

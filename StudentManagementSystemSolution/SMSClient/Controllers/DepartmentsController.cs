@@ -8,31 +8,24 @@ using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
 using SMSClient.Data.Identity;
-using SMSClient.Models;
-using SMSClient.Models.ViewModel;
+using SMSClient.Model;
 using SMSClient.Service.Courses;
 using SMSClient.Service.Departments;
-using SMSClient.Service.Semesters;
+using SMSClient.Service.Classes;
 using SMSClient.Service.Students;
 
 namespace SMSClient.Controllers
 {
     public class DepartmentsController: Controller
     {
-        private readonly AspIdUsersContext _context;
 
         private readonly IDepartmentService _departmentService;
         private readonly ICourseService _courseService;
-        private readonly ISemesterService _semesterService;
-        private readonly IStudentService _studentService;
 
-        public DepartmentsController(AspIdUsersContext context, IDepartmentService departmentService, ICourseService courseService, ISemesterService semesterService, IStudentService studentService)
+        public DepartmentsController(IDepartmentService departmentService, ICourseService courseService)
         {
-            _context = context;
             _departmentService = departmentService;
             _courseService = courseService;
-            _semesterService = semesterService;
-            _studentService = studentService;
         }
 
 
@@ -60,23 +53,18 @@ namespace SMSClient.Controllers
 
         [CustomAuthorize(AccessLevels.Create, Modules.Department)]
         [HttpPost]
-        public async Task<IActionResult> Create(DepartmentViewModel departmentForm)
+        public async Task<IActionResult> Create(Department department)
         {
             try
             {
-                if (!ModelState.IsValid) return View(departmentForm);
-                var result = await _departmentService.AddDepartment(departmentForm);
-                if (!result)
-                {
-                    Log.Error("An error occured while creating department");
-                    return View(departmentForm);
-                }
-                Log.Information("Create department");
+                if (!ModelState.IsValid) return View(department);
+                await _departmentService.AddDepartment(department);
+                Log.Information("New Department Created");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error("An error occured while saving the department" + ex.Message);
                 throw;
             }
         }
@@ -104,13 +92,9 @@ namespace SMSClient.Controllers
             try
             {
                 if (!ModelState.IsValid) return Json(false);
-                var result = await _departmentService.UpdateDepartment(department);
-                if (result)
-                {
-                    Log.Information("Successfully updated the department");
-                    return Json(true);
-                }
-                else return Json(false);
+                await _departmentService.UpdateDepartment(department);
+                Log.Information("Successfully updated the department");
+                return Json(true);
             }
             catch(Exception ex)
             {
@@ -141,15 +125,11 @@ namespace SMSClient.Controllers
         {
             try
             {
-                var department = await _departmentService.GetDepartmentById(Int32.Parse(id));
+                var department = await _departmentService.GetDepartmentWithClassInfo(Int32.Parse(id));
                 if (department is null) return Json(false);
-                var result = await _departmentService.DeleteDepartment(department);
-                if (result)
-                {
-                    Log.Information("Successfully deleted the department");
-                    return Json(true);
-                }
-                else return Json(false);
+                await _departmentService.DeleteDepartment(department);
+                Log.Information("Successfully deleted the department");
+                return Json(true);
             }
             catch(Exception ex)
             {
@@ -161,22 +141,22 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<object> GetUnassignedCourses(DataSourceLoadOptions loadOptions)
         {
-            var courses = await _courseService.GetUnassignedCoursesofDepartment();
+            var courses = _courseService.GetUnassignedCoursesofDepartment();
             return DataSourceLoader.Load(courses,loadOptions);
         }
 
-        [HttpGet]
-        public async Task<object> GetSemesters(DataSourceLoadOptions loadOptions)
-        {
-            var semesters = await _semesterService.GetSemesters();
-            return DataSourceLoader.Load(semesters,loadOptions);
-        }
+        //[HttpGet]
+        //public async Task<object> GetSemesters(DataSourceLoadOptions loadOptions)
+        //{
+        //    var semesters = await _semesterService.GetSemesters();
+        //    return DataSourceLoader.Load(semesters,loadOptions);
+        //}
 
-        [HttpGet]
-        public async Task<object> GetUnassignedStudents(DataSourceLoadOptions loadOptions)
-        {
-            var students = await _studentService.GetStudentsUnAssignedToAnyDepartment();
-            return DataSourceLoader.Load(students, loadOptions);
-        }
+        //[HttpGet]
+        //public async Task<object> GetUnassignedStudents(DataSourceLoadOptions loadOptions)
+        //{
+        //    var students = await _studentService.GetStudentsUnAssignedToAnyDepartment();
+        //    return DataSourceLoader.Load(students, loadOptions);
+        //}
     }
 }

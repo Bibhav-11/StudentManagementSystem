@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model SMSClient.Models.Student
+@model SMSClient.Model.Student
 
 <div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -41,6 +41,11 @@
                             <input asp-for="Email" class="form-control" id="email" type="text" autocomplete="off" />
                             <span class="text-danger" asp-validation-for="Email"></span>
                         </div>
+                        <div class="col-6">
+                            <label>Phone</label>
+                            <input asp-for="Email" class="form-control" id="phone" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
                     </div>
 
                     <div class="row mt-2">
@@ -51,15 +56,8 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-6">
-                            <label>Department</label>
-                            <div id="createDepartmentDropdown"></div>
-                        </div>
-                        <div class="col-6">
-                            <label>Semester</label>
-                            <div id="createSemesterDropdown"></div>
-                        </div>
-
+                        <label>Class</label>
+                            <div id="classDropdown"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -80,7 +78,7 @@
 }
 
 <script>
-    var date, department, semester;
+    var date, department, classId;
 
     $('#createStudentDOBContainer').dxDateBox({
         placeholder: '10/16/2018',
@@ -94,27 +92,18 @@
         }
     });
 
-    $("#createDepartmentDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetDepartments", "Students")',
-        displayExpr: "LongName",
+    $("#classDropdown").dxSelectBox({
+        dataSource: '@Url.Action("GetClasses", "Students")',
+        displayExpr: "Name",
         valueExpr: "Id",
         onValueChanged: function (e) {
-            department = e.value;
+            classId = e.value;
         }
     })
 
-    $("#createSemesterDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetSemesters", "Students")',
-        displayExpr: "LongName",
-        valueExpr: "Id",
-        onValueChanged: function (e) {
-            semester = e.value;
-        }
-    })
 
     $("#addStudentForm").on('submit', function (e) {
         e.preventDefault();
-        console.log(date, department, semester);
         $.validator.unobtrusive.parse('#addStudentForm');
         $("#addStudentForm").validate();
 
@@ -130,9 +119,9 @@
             firstName: $("#firstName").val(),
             lastName: $("#lastName").val(),
             email: $("#email").val(),
+            phone: $("#phone").val(),
             dateOfBirth: date.toJSON(),
-            departmentId: department,
-            semesterId: semester,
+            classId: classId
         }
         console.log(formData);
         $.ajax({

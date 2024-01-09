@@ -1,4 +1,4 @@
-﻿@using SMSClient.Models.ViewModel;
+﻿
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -21,6 +21,8 @@
     }
 </style>
 
+@model SMSClient.Model.Department
+@using SMSClient.Model
 
 <div class="main-container">
 
@@ -31,7 +33,7 @@
 @using (Html.BeginForm("Create", "Departments", FormMethod.Post))
 {
 
-    @(Html.DevExtreme().Form<DepartmentViewModel>()
+    @(Html.DevExtreme().Form<Department>()
                     .Items(items =>
                     {
                         items.AddGroup()
@@ -53,26 +55,11 @@
                                 groupItems.AddSimpleFor(m => m.Email)
                                 .Editor(e => e.TextBox());
 
+                                    groupItems.AddSimpleFor(m => m.Phone)
+                                .Editor(e => e.TextBox());
+
                         });
 
-                        items.AddGroup()
-                        .ColCount(2)
-                        .Items(groupItems =>
-                        {
-                                groupItems.AddSimpleFor(m => m.CourseCodes)
-                                .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetUnassignedCourses")).DisplayExpr("LongName").ValueExpr("CourseCode"));
-                        });
-
-                        items.AddGroup()
-                        .ColCount(2)
-                        .Items(groupItems =>
-                        {
-                            groupItems.AddSimpleFor(m => m.SemesterIds)
-                        .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetSemesters")).DisplayExpr("LongName").ValueExpr("Id"));
-
-                            groupItems.AddSimpleFor(m => m.StudentIds)
-                            .Editor(e => e.TagBox().DataSource(d => d.Mvc().LoadAction("GetUnassignedStudents")).DisplayExpr("FirstName").ValueExpr("Id"));
-                        });
 
 
                         items.AddButton()

@@ -1,4 +1,4 @@
-﻿using SMSClient.Models;
+﻿using SMSClient.Model;
 using SMSClient.Repository;
 
 namespace SMSClient.Service.Courses
@@ -6,8 +6,9 @@ namespace SMSClient.Service.Courses
     public interface ICourseService
     {
         Task<IEnumerable<Course>> GetCourses();
+        Task<IEnumerable<Course>> GetCoursesWithClassInfo();
         Task<Course?> GetCourseById(string id);
-        Task<IEnumerable<Course>> GetUnassignedCoursesofDepartment();
+        IEnumerable<Course> GetUnassignedCoursesofDepartment();
 
         Task CreateCourse(Course course);
 

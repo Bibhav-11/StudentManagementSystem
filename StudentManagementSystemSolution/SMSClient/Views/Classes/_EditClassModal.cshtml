@@ -1,0 +1,166 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SMSClient.Model.Class
+
+
+<div class="modal fade" id="editClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        @Html.HiddenFor(m => m.Id)
+        <div class="modal-content">
+            <form id="editClassFOrm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Update a Class</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                           @* <input asp-for="Id" class="form-control" id="userId" disabled />*@
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label>Name</label>
+                            <input asp-for="Name" class="form-control" id="name" type="text" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <label id="startDateLabel" data-start="@Model.StartDate">Start Date</label>
+                        <div class="dx-field">
+                            <div class="dx-field-value">
+                                <div id="startDate"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <label id="endDateLabel" data-start="@Model.EndDate">End Date</label>
+                        <div class="dx-field">
+                            <div class="dx-field-value">
+                                <div id="endDate"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label id="departmentLabel" data-department="@Model.DepartmentId">Department</label>
+                            <div id="departmentContainer"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="saveEditSemester" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+    var startDate = $("#startDateLabel").data("start"), endDate = $("#endDateLabel").data("start"), departmentId = $("#departmentLabel").data("department");
+
+
+    $('#startDate').dxDateBox({
+        placeholder: '10/16/2018',
+        showClearButton: true,
+        useMaskBehavior: true,
+        value: $("#startDateLabel").data("start"),
+        displayFormat: 'shortdate',
+        type: 'date',
+        inputAttr: { 'aria-label': 'Date' },
+        onValueChanged: function (e) {
+            startDate = e.value;
+        }
+    });
+    $('#endDate').dxDateBox({
+        placeholder: '10/16/2018',
+        showClearButton: true,
+        useMaskBehavior: true,
+        value: $("#endDateLabel").data("start"),
+        displayFormat: 'shortdate',
+        type: 'date',
+        inputAttr: { 'aria-label': 'Date' },
+        onValueChanged: function (e) {
+            endDate = e.value;
+        }
+    });
+
+    $(document).ready(function () {
+        console.log($("#departmentLabel").data("department"));
+    })
+
+    $(function () {
+        $("#departmentContainer").dxSelectBox({
+            dataSource: '@Url.Action("GetDepartmentsForDropdown", "Classes")',
+            value: $("#departmentLabel").data("department"),
+            valueExpr: 'Id',
+            displayExpr: 'LongName',
+            onValueChanged: function (e) {
+                departmentId = e.value;
+            }
+        });
+    });
+
+
+
+    $("#editClassFOrm").on('submit', function (e) {
+        e.preventDefault();
+        $.validator.unobtrusive.parse('#editClassFOrm');
+        $("#editClassFOrm").validate();
+
+        if (!$("#editClassFOrm").valid()) {
+            $.notify("Not valid");
+            return;
+        }
+        $("#Save").prop("disabled", true);
+        $("#Save").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+        let formData = {
+            id: $("#Id").val(),
+            name: $("#name").val(),
+            startDate: startDate,
+            endDate: endDate,
+            departmentId: departmentId
+        }
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            data: formData,
+            url: '@Url.Action("AjaxUpdate", "Classes")',
+            success: function (response) {
+                if (response == true) {
+                    $.notify("Class Updated Successfully", "success");
+                    $("#editClassModal").modal("hide");
+                    location.reload();
+                }
+                else $.notify("Sorry some error occurred");
+
+            },
+            error: function (e) {
+                $.notify(e.message);
+            }
+        })
+
+    })
+</script>

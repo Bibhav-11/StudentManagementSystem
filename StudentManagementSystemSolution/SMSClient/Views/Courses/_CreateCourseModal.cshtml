@@ -48,13 +48,12 @@
 
                     <div class="row mt-2">
                         <div class="col-6">
-                            <label>Credits</label>
-                            <input asp-for="Credits" class="form-control" id="credits" type="text" autocomplete="off" />
-                            <span class="text-danger" asp-validation-for="Credits"></span>
+                            <label>Class</label>
+                            <select class="form-select form-select-lg mb-3" id="classId">
+                                <option value="null" selected>Choose Class</option>
+                            </select>
                         </div>
                     </div>
-
-
 
                 </div>
                 <div class="modal-footer">
@@ -75,6 +74,27 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
 <script>
+    var loadedClass = false;
+
+    $("#classId").on('click', function () {
+        if (!loadedClass) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetClassesDropdown", "Courses")',
+                dataType: "html",
+                success: function (response) {
+                    console.log(response);
+                    $("#classId").append(response);
+                    loadedClass = true
+                }
+            })
+        }
+
+    })
+
+
+
+
     let errorCourse = false;
     $("#courseCode").on("change", function () {
         let courseCode = $("#courseCode").val();
@@ -120,7 +140,7 @@
             courseCode: $("#courseCode").val(),
             shortName: $("#shortName").val(),
             longName: $("#longName").val(),
-            credits: $("#credits").val(),
+            classId: $("#classId").val()
         }
 
         $.ajax({

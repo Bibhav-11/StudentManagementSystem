@@ -8,31 +8,55 @@ namespace SMSClient.Models
     {
          public static List<CustomRoleClaims> CustomRoleClaims = new List<CustomRoleClaims>
             {
-            new CustomRoleClaims
+             new CustomRoleClaims
             {
-                DisplayClaimName = "Create Course",
+                DisplayClaimName = "Create Role",
                 AccessLevel = AccessLevels.Create,
-                Module = Modules.Course,
+                Module = Modules.Role
             },
             new CustomRoleClaims
             {
-                DisplayClaimName = "View Course",
+                DisplayClaimName = "View Role",
                 AccessLevel = AccessLevels.View,
-                Module = Modules.Course
+                Module = Modules.Role
             },
              new CustomRoleClaims
             {
-                DisplayClaimName = "Edit Course",
+                DisplayClaimName = "Edit Role",
                 AccessLevel = AccessLevels.Edit,
-                Module = Modules.Course
+                Module = Modules.Role
             },
               new CustomRoleClaims
             {
-                DisplayClaimName = "Delete Course",
+                DisplayClaimName = "Delete Role",
                 AccessLevel = AccessLevels.Delete,
-                Module = Modules.Course
+                Module = Modules.Role
+            },
+              new CustomRoleClaims
+            {
+                DisplayClaimName = "Create User",
+                AccessLevel = AccessLevels.Create,
+                Module = Modules.User
             },
             new CustomRoleClaims
+            {
+                DisplayClaimName = "View User",
+                AccessLevel = AccessLevels.View,
+                Module = Modules.User
+            },
+             new CustomRoleClaims
+            {
+                DisplayClaimName = "Edit User",
+                AccessLevel = AccessLevels.Edit,
+                Module = Modules.User
+            },
+              new CustomRoleClaims
+            {
+                DisplayClaimName = "Delete User",
+                AccessLevel = AccessLevels.Delete,
+                Module = Modules.User
+            },
+              new CustomRoleClaims
             {
                 DisplayClaimName = "Create Department",
                 AccessLevel = AccessLevels.Create,
@@ -58,28 +82,53 @@ namespace SMSClient.Models
             },
               new CustomRoleClaims
             {
-                DisplayClaimName = "Create Role",
+                DisplayClaimName = "Create Class",
                 AccessLevel = AccessLevels.Create,
-                Module = Modules.Role
+                Module = Modules.Class
             },
             new CustomRoleClaims
             {
-                DisplayClaimName = "View Role",
+                DisplayClaimName = "View Class",
                 AccessLevel = AccessLevels.View,
-                Module = Modules.Role
+                Module = Modules.Class
             },
              new CustomRoleClaims
             {
-                DisplayClaimName = "Edit Role",
+                DisplayClaimName = "Edit Class",
                 AccessLevel = AccessLevels.Edit,
-                Module = Modules.Role
+                Module = Modules.Class
             },
               new CustomRoleClaims
             {
-                DisplayClaimName = "Delete Role",
+                DisplayClaimName = "Delete Class",
                 AccessLevel = AccessLevels.Delete,
-                Module = Modules.Role
+                Module = Modules.Class
             },
+            new CustomRoleClaims
+            {
+                DisplayClaimName = "Create Course",
+                AccessLevel = AccessLevels.Create,
+                Module = Modules.Course,
+            },
+            new CustomRoleClaims
+            {
+                DisplayClaimName = "View Course",
+                AccessLevel = AccessLevels.View,
+                Module = Modules.Course
+            },
+             new CustomRoleClaims
+            {
+                DisplayClaimName = "Edit Course",
+                AccessLevel = AccessLevels.Edit,
+                Module = Modules.Course
+            },
+              new CustomRoleClaims
+            {
+                DisplayClaimName = "Delete Course",
+                AccessLevel = AccessLevels.Delete,
+                Module = Modules.Course
+            },
+
                    new CustomRoleClaims
             {
                 DisplayClaimName = "Create Student",
@@ -104,54 +153,31 @@ namespace SMSClient.Models
                 AccessLevel = AccessLevels.Delete,
                 Module = Modules.Student
             },
-             new CustomRoleClaims
+            new CustomRoleClaims
             {
-                DisplayClaimName = "Create User",
+                DisplayClaimName = "Create Teacher",
                 AccessLevel = AccessLevels.Create,
-                Module = Modules.User
+                Module = Modules.Teacher
             },
             new CustomRoleClaims
             {
-                DisplayClaimName = "View User",
+                DisplayClaimName = "View Teacher",
                 AccessLevel = AccessLevels.View,
-                Module = Modules.User
+                Module = Modules.Teacher
             },
              new CustomRoleClaims
             {
-                DisplayClaimName = "Edit User",
+                DisplayClaimName = "Edit Teacher",
                 AccessLevel = AccessLevels.Edit,
-                Module = Modules.User
+                Module = Modules.Teacher
             },
               new CustomRoleClaims
             {
-                DisplayClaimName = "Delete User",
+                DisplayClaimName = "Delete Teacher",
                 AccessLevel = AccessLevels.Delete,
-                Module = Modules.User
+                Module = Modules.Teacher
             },
-                           new CustomRoleClaims
-            {
-                DisplayClaimName = "Create Semester",
-                AccessLevel = AccessLevels.Create,
-                Module = Modules.Semester
-            },
-            new CustomRoleClaims
-            {
-                DisplayClaimName = "View Semester",
-                AccessLevel = AccessLevels.View,
-                Module = Modules.Semester
-            },
-             new CustomRoleClaims
-            {
-                DisplayClaimName = "Edit Semester",
-                AccessLevel = AccessLevels.Edit,
-                Module = Modules.Semester
-            },
-              new CustomRoleClaims
-            {
-                DisplayClaimName = "Delete Semester",
-                AccessLevel = AccessLevels.Delete,
-                Module = Modules.Semester
-            },
+
 
 
         };

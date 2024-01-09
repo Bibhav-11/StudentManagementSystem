@@ -1,0 +1,24 @@
+2024-01-08 06:00:00.522 +05:45 [INF] Successfully deleted the student
+2024-01-08 06:00:08.567 +05:45 [INF] Successfully updated the student
+2024-01-08 06:01:11.477 +05:45 [INF] Successfully created the semester
+2024-01-08 06:01:40.233 +05:45 [ERR] An error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 06:01:41.133 +05:45 [ERR] An error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 06:01:41.699 +05:45 [ERR] An error occurred while saving the entity changes. See the inner exception for details.
+2024-01-08 06:03:56.078 +05:45 [INF] Successfully created the semester
+2024-01-08 06:04:08.389 +05:45 [INF] Successfully updated the student
+2024-01-08 06:04:29.735 +05:45 [INF] Successfully updated the student
+2024-01-08 06:04:36.999 +05:45 [INF] Successfully updated the student
+2024-01-08 06:05:05.488 +05:45 [INF] Successfully updated the student
+2024-01-08 06:05:07.963 +05:45 [INF] Successfully updated the student
+2024-01-08 06:05:09.849 +05:45 [INF] Successfully updated the student
+2024-01-08 06:05:19.615 +05:45 [INF] Successfully updated the class
+2024-01-08 06:05:21.742 +05:45 [INF] Successfully updated the class
+2024-01-08 06:05:59.707 +05:45 [INF] Successfully updated the class
+2024-01-08 06:06:03.916 +05:45 [INF] Successfully updated the class
+2024-01-08 06:06:05.677 +05:45 [INF] Successfully updated the class
+2024-01-08 06:06:07.429 +05:45 [INF] Successfully updated the class
+2024-01-08 06:06:09.633 +05:45 [INF] Successfully updated the class
+2024-01-08 06:38:37.953 +05:45 [INF] New Teacher created
+2024-01-08 06:41:46.658 +05:45 [INF] Successfully updated the student
+2024-01-08 06:41:56.968 +05:45 [INF] Successfully updated the student
+2024-01-08 06:44:18.654 +05:45 [INF] Successfully deleted the student

@@ -1,6 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using static System.Formats.Asn1.AsnWriter;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServer
 {
@@ -19,13 +19,22 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-            new ApiScope("scope1"),
-            new ApiScope("scope2"),
+            new ApiScope("attendance.full_access"),
             };
 
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+         return new List<ApiResource>
+            {
+                new ApiResource("attendance", "Attendance API")
+                {
+                    Scopes = { "attendance.full_access" },
+                    UserClaims = {"role"}
+                },
+            };
+        }
 
-
-public static IEnumerable<Client> Clients =>
+        public static IEnumerable<Client> Clients =>
             new Client[]
             {
             //// m2m client credentials flow client
@@ -70,7 +79,7 @@ public static IEnumerable<Client> Clients =>
                 FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",
                 PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
-                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "permissions", "roles" }
+                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "permissions", "roles", "attendance.full_access" }
             }
 
             };

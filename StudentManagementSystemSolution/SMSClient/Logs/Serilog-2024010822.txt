@@ -1,0 +1,38 @@
+2024-01-08 22:05:47.818 +05:45 [INF] Successfully deleted the user
+2024-01-08 22:05:49.470 +05:45 [INF] Successfully deleted the user
+2024-01-08 22:05:53.876 +05:45 [INF] Successfully deleted the department
+2024-01-08 22:05:56.879 +05:45 [INF] Successfully deleted the semester
+2024-01-08 22:05:59.761 +05:45 [INF] Successfully deleted the department
+2024-01-08 22:06:01.206 +05:45 [INF] Successfully deleted the department
+2024-01-08 22:06:05.330 +05:45 [INF] Successfully deleted the department
+2024-01-08 22:07:50.492 +05:45 [INF] Successfully created the user
+2024-01-08 22:08:36.422 +05:45 [INF] Successfully created the user
+2024-01-08 22:09:04.718 +05:45 [INF] Successfully created the user
+2024-01-08 22:09:49.052 +05:45 [INF] Successfully created the user
+2024-01-08 22:10:32.732 +05:45 [INF] New Department Created
+2024-01-08 22:10:46.933 +05:45 [INF] New Department Created
+2024-01-08 22:11:10.738 +05:45 [INF] New Department Created
+2024-01-08 22:11:34.024 +05:45 [INF] New Department Created
+2024-01-08 22:12:12.398 +05:45 [INF] New Department Created
+2024-01-08 22:12:38.149 +05:45 [INF] New Class created
+2024-01-08 22:12:56.291 +05:45 [INF] New Class created
+2024-01-08 22:13:28.543 +05:45 [INF] New Class created
+2024-01-08 22:13:47.933 +05:45 [INF] New Class created
+2024-01-08 22:14:05.301 +05:45 [INF] New Class created
+2024-01-08 22:14:37.493 +05:45 [INF] New Class created
+2024-01-08 22:15:16.906 +05:45 [INF] Added new course
+2024-01-08 22:15:36.242 +05:45 [INF] Added new course
+2024-01-08 22:15:59.330 +05:45 [INF] Added new course
+2024-01-08 22:16:17.182 +05:45 [INF] Added new course
+2024-01-08 22:16:37.811 +05:45 [INF] Added new course
+2024-01-08 22:16:58.651 +05:45 [INF] Added new course
+2024-01-08 22:17:39.991 +05:45 [INF] Successfully created the semester
+2024-01-08 22:18:30.186 +05:45 [INF] Successfully created the semester
+2024-01-08 22:18:56.648 +05:45 [INF] Successfully created the semester
+2024-01-08 22:19:18.367 +05:45 [INF] Successfully created the semester
+2024-01-08 22:19:45.855 +05:45 [INF] Successfully created the semester
+2024-01-08 22:20:16.802 +05:45 [INF] New Teacher created
+2024-01-08 22:20:23.388 +05:45 [INF] New Teacher created
+2024-01-08 22:20:55.552 +05:45 [INF] New Teacher created
+2024-01-08 22:21:11.216 +05:45 [INF] New Teacher created
+2024-01-08 22:21:34.108 +05:45 [INF] New Teacher created

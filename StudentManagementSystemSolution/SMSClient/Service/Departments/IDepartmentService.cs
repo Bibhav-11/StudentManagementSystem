@@ -1,5 +1,4 @@
-﻿using SMSClient.Models;
-using SMSClient.Models.ViewModel;
+﻿using SMSClient.Model;
 
 namespace SMSClient.Service.Departments
 {
@@ -7,13 +6,14 @@ namespace SMSClient.Service.Departments
     {
         Task<IEnumerable<Department>> GetDepartments();
         Task<Department?> GetDepartmentById(int id);
+        Task<Department?> GetDepartmentWithClassInfo(int departmentId);
 
-        Task<bool> AddDepartment(DepartmentViewModel departmentForm);
+        Task AddDepartment(Department department);
         Task CreateDepartment(Department department);
 
-        Task<bool> UpdateDepartment(Department department);
+        Task UpdateDepartment(Department department);
 
-        Task<bool> DeleteDepartment(Department department);
+        Task DeleteDepartment(Department department);
 
     }
 }

@@ -20,7 +20,7 @@ namespace SMSClient.Models
         [ForeignKey("Department")]
         public int? DepartmentId { get; set; }
 
-        public Department? Department { get; set; } = null!;
+        public Departments? Department { get; set; } = null!;
         public List<SemesterCourse> SemesterCourses { get; } = new List<SemesterCourse>();
         public List<Semester> Semesters { get; } = new List<Semester>();
     }

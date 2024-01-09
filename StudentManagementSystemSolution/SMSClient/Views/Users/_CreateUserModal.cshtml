@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model SMSClient.Models.ViewModel.UserFormViewModel
+@model SMSClient.Model.UserFormViewModel
 
 
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -29,6 +29,7 @@
                         <label>User Name</label>
                         <input asp-for="UserName" class="form-control" id="userName" type="text" autocomplete="off" />
                         <span class="text-danger" asp-validation-for="UserName"></span>
+                         <span class="usernameExists text-danger"></span>
                     </div>
                 </div>
 
@@ -128,7 +129,7 @@
             if (!userName) return;
 
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: '@Url.Action("CheckIfUserNameExists", "Users")',
                 data: { userName: userName },
                 dataType: "json",

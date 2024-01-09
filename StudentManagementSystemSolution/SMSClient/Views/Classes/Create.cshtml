@@ -1,0 +1,73 @@
+﻿@using SMSClient.Model;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+    .main-container {
+        display: flex;
+        min-height: 90vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dx-form-container {
+        width: 70%;
+        border-radius: 5px;
+        box-shadow: 0 0 2px 2px rgba(0,0,0,0.1);
+        padding: 40px;
+    }
+</style>
+
+
+<div class="main-container">
+
+    <div class="dx-fieldset-header">Add a Class</div>
+    <div class="dx-form-container">
+    @using (Html.BeginForm("Create", "Classes", FormMethod.Post))
+    {
+
+        @(Html.DevExtreme().Form<Class>()
+            .Items(items =>
+            {
+                items.AddGroup()
+                .ColCount(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.Name)
+                .Editor(e => e.TextBox());
+                });
+
+                items.AddGroup()
+                .ColCount(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.StartDate)
+                .Editor(e => e.DateBox());
+
+                    groupItems.AddSimpleFor(m => m.EndDate)
+                .Editor(e => e.DateBox());
+
+                });
+
+                items.AddGroup()
+                .ColCount(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.DepartmentId)
+                .Editor(e => e.SelectBox().DataSource(d => d.Mvc().LoadAction("GetDepartments")).DisplayExpr("LongName").ValueExpr("Id"));
+
+                });
+
+
+                items.AddButton()
+                .ButtonOptions(button => button.Text("Add Class")
+                .UseSubmitBehavior(true));
+            })
+            )
+
+    }
+</div>
+</div>

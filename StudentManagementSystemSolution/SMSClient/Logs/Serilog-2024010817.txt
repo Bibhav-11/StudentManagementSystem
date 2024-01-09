@@ -1,0 +1,9 @@
+2024-01-08 17:54:06.473 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:54:42.026 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:54:57.204 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:56:03.766 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:56:37.656 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:56:45.839 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:57:06.936 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:57:10.454 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).
+2024-01-08 17:57:27.779 +05:45 [ERR] Could not get a list of attendances Response status code does not indicate success: 401 (Unauthorized).

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SMSClient.Models;
-using SMSClient.Models.Identity;
+using SMSClient.Model;
 using System.Reflection.Emit;
 
 namespace SMSClient.Data.Identity
@@ -15,12 +14,11 @@ namespace SMSClient.Data.Identity
         }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Class> Classes { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Semester> Semesters { get; set; }
-        public DbSet<DepartmentSemester> DepartmentSemesters { get; set; }
-        public DbSet<SemesterCourse> SemesterCourses { get; set; }
-        public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

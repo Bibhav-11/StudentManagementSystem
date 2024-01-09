@@ -2,6 +2,7 @@ using AttendanceAPI.Data;
 using AttendanceAPI.DateOnlyConverters;
 using AttendanceAPI.Repository;
 using AttendanceAPI.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,15 @@ builder.Services.AddDbContext<AttendanceContext>(options => options.UseSqlServer
 builder.Services.AddScoped<IAttendanceRecordRepository, AttendanceRecordRepository>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:5001/";
+        options.Audience = "attendance";
+        options.TokenValidationParameters.ValidateLifetime = false;
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+    });
+
 
 var app = builder.Build();
 
@@ -32,6 +42,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
