@@ -6,6 +6,7 @@ namespace SMSClient.Service.Students
     {
         Task<IEnumerable<Student>> GetStudents();
         Task<IEnumerable<Student>> GetStudentsWithClassInfo();
+        Task<IEnumerable<Student>> GetStudentsByClassId(int classId);
 
         Task<Student?> GetStudentById(int id);
         Task<Student?> GetStudentByUserId(string userId);

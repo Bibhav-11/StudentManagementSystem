@@ -13,6 +13,11 @@ namespace SMSClient.Repository.Students
             _context = context;
         }
 
+        public async Task<IEnumerable<Student>> GetByClassId(int classId)
+        {
+            return await _context.Students.Where(s => s.ClassId == classId).ToListAsync();
+        }
+
         public async Task<IEnumerable<Student>> GetStudentsWithClassInfo()
         {
             return await _context.Students.Include(s => s.Class).ToListAsync();

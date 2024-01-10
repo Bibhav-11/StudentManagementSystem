@@ -33,6 +33,9 @@ namespace AttendanceAPI.Migrations
                     b.Property<DateTime?>("AttendanceDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
                     b.Property<int>("IsPresent")
                         .HasColumnType("int");
 
@@ -44,7 +47,7 @@ namespace AttendanceAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AttendanceRecords", (string)null);
+                    b.ToTable("AttendanceRecords");
                 });
 #pragma warning restore 612, 618
         }

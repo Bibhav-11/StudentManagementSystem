@@ -29,6 +29,11 @@ namespace SMSClient.Service.Students
             return await _studentRepository.GetAll();
         }
 
+        public async Task<IEnumerable<Student>> GetStudentsByClassId(int classId)
+        {
+            return await _studentRepository.GetByClassId(classId);
+        }
+
         public Task<Student?> GetStudentById(int id)
         {
             return _studentRepository.GetById(id);

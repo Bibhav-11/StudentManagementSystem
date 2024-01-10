@@ -29,7 +29,7 @@ namespace IdentityServer
                 new ApiResource("attendance", "Attendance API")
                 {
                     Scopes = { "attendance.full_access" },
-                    UserClaims = {"role"}
+                    UserClaims = {"role", "student", "class"}
                 },
             };
         }

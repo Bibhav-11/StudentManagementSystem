@@ -14,7 +14,22 @@ namespace SMSClient.Client
             
         }
 
+        public async Task<IEnumerable<AttendanceResponse>?> GetAllAttendances(int? classId, string accessToken)
+        {
+            try
+            {
 
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+                var result = await _httpClient.GetFromJsonAsync<IEnumerable<AttendanceResponse>?>($"attendances/all/{classId}");
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
+        }
 
         public async Task<HttpResponseMessage> PostListOfAttendanceAsync(IEnumerable<AttendanceRequest> attendanceRequests, string accessToken) 
         {
@@ -23,12 +38,12 @@ namespace SMSClient.Client
             return responseMessage;
         }
 
-        public async Task<bool> CheckIfAlreadyExists(string accessToken)
+        public async Task<bool> CheckIfAlreadyExists(int classId, string accessToken)
         {
             try
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                HttpResponseMessage responseMessage = await _httpClient.GetAsync("attendances/alreadyexists");
+                HttpResponseMessage responseMessage = await _httpClient.GetAsync($"attendances/alreadyexists/{classId}");
                 string response = await responseMessage.Content.ReadAsStringAsync();
                 return Boolean.Parse(response);
             }
@@ -45,7 +60,7 @@ namespace SMSClient.Client
             {
 
                 _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                var result = await _httpClient.GetFromJsonAsync<IEnumerable<AttendanceResponse>>($"attendances/get?StudentId={attendanceRequest.StudentId}&TeacherId={attendanceRequest.TeacherId}&StartDate={attendanceRequest.StartDate}&EndDate={attendanceRequest.EndDate}");
+                var result = await _httpClient.GetFromJsonAsync<IEnumerable<AttendanceResponse>>($"attendances/get?StudentId={attendanceRequest.StudentId}&TeacherId={attendanceRequest.TeacherId}&StartDate={attendanceRequest.StartDate}&EndDate={attendanceRequest.EndDate}&ClassId={attendanceRequest.ClassId}");
                 return result;
 
             }

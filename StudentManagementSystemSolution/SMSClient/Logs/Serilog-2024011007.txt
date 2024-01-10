@@ -1,0 +1,3 @@
+2024-01-10 07:33:16.756 +05:45 [INF] Successfully created the semester
+2024-01-10 07:33:33.043 +05:45 [INF] Successfully updated the student
+2024-01-10 07:36:58.713 +05:45 [INF] Teacher updated

@@ -9,7 +9,7 @@ namespace AttendanceAPI.Models
         public int TeacherId { get; set; }
         public DateOnly? AttendanceDate { get; set; }
         public int IsPresent { get; set; }
-
+        public int ClassId { get; set; }
         public AttendanceRecordResponse ToAttendanceRecordResponse()
         {
             var attendanceRecordResponse = new AttendanceRecordResponse
@@ -18,7 +18,8 @@ namespace AttendanceAPI.Models
                 StudentId = StudentId,
                 TeacherId = TeacherId,
                 AttendanceDate = AttendanceDate,
-                IsPresent = IsPresent
+                IsPresent = IsPresent,
+                ClassId = ClassId
             };
             return attendanceRecordResponse;
         }

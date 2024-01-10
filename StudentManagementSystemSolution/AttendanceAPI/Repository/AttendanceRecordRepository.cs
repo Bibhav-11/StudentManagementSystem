@@ -32,13 +32,13 @@ namespace AttendanceAPI.Repository
 
         public async Task<IEnumerable<AttendanceRecord>> GetAsync(int id)
         {
-            var record = await _attendanceContext.AttendanceRecords.Where(ar => ar.StudentId == id).ToListAsync();
+            var record = await _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList @StudentId = {id}").ToListAsync();
             return record;
         }
 
-        public async Task<IEnumerable<AttendanceRecord>> GetAllAsync()
+        public async Task<IEnumerable<AttendanceRecord>> GetAllAsync(int classId)
         {
-            var records = _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList");
+            var records = await _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList @ClassId = {classId}").ToListAsync();
             return records;
         }
 
@@ -77,10 +77,10 @@ namespace AttendanceAPI.Repository
             await _attendanceContext.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckIfAlreadyExists()
+        public async Task<bool> CheckIfAlreadyExists(int classid)
         {
             var today = DateOnly.FromDateTime(DateTime.Now);
-            var alreadyExists = await _attendanceContext.AttendanceRecords.AnyAsync(a => a.AttendanceDate == today);
+            var alreadyExists = await _attendanceContext.AttendanceRecords.AnyAsync(a => a.AttendanceDate == today && a.ClassId == classid);
             return alreadyExists;
         }
 
@@ -88,6 +88,12 @@ namespace AttendanceAPI.Repository
         {
             var records = await _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList @StudentId = {attendanceRequest.StudentId}, @TeacherId = {attendanceRequest.TeacherId}, @StartDate = {attendanceRequest.StartDate}, @EndDate={attendanceRequest.EndDate}").ToListAsync();
             return records;
+        }
+
+        public async Task DeleteRangeAsync(IEnumerable<AttendanceRecord> attendanceRecords)
+        {
+            _attendanceContext.RemoveRange(attendanceRecords);
+            await _attendanceContext.SaveChangesAsync();
         }
     }
 }

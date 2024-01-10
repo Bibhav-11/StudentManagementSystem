@@ -5,7 +5,7 @@ namespace AttendanceAPI.Repository
 {
     public interface IAttendanceRecordRepository
     {
-        Task<IEnumerable<AttendanceRecord>> GetAllAsync();
+        Task<IEnumerable<AttendanceRecord>> GetAllAsync(int classId);
         Task<IEnumerable<AttendanceRecord>> GetAsync(int id);
         Task<IEnumerable<AttendanceRecord>> GetAttendance(AttendanceRecordGetDTO attendanceRequest);
         Task<bool> CreateAsync(AttendanceRecord record);
@@ -16,6 +16,8 @@ namespace AttendanceAPI.Repository
 
         Task SaveAsync();
 
-        Task<bool> CheckIfAlreadyExists();
+        Task<bool> CheckIfAlreadyExists(int classid);
+
+        Task DeleteRangeAsync(IEnumerable<AttendanceRecord> attendanceRecords);
     }
 }

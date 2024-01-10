@@ -17,12 +17,16 @@ namespace AttendanceAPI.Controllers
             _attendanceService = attendanceService;
         }
 
-        [HttpGet]
+        [HttpGet("all/{classId}")]
         [Authorize(Roles = "teacher")]
-        public async Task<IActionResult> GetAllAttendances()
+        public async Task<IActionResult> GetAllAttendancesOfAClass([FromRoute] int classId)
         {
-            var attendanceRecords = await _attendanceService.GetAllAsync();
+            var attendanceRecords = await _attendanceService.GetAllAsync(classId);
             var attendanceRecordsResponse = attendanceRecords.Select(a => a.ToAttendanceRecordResponse()).ToList();
+            if (attendanceRecordsResponse == null)
+            {
+                return Ok(new List<AttendanceRecordResponse>());
+            }
             return Ok(attendanceRecordsResponse);
         }
 
@@ -44,7 +48,7 @@ namespace AttendanceAPI.Controllers
             var attendanceRecords = attendanceRecordRequests.Select(x => x.ToAttendanceRecord());
             await _attendanceService.CreateListOfAttendancesAsync(attendanceRecords);
 
-            return Ok(attendanceRecords);
+            return Ok(new {Success = true});
         }
 
         [HttpGet("{studentId}")]
@@ -57,18 +61,35 @@ namespace AttendanceAPI.Controllers
             return Ok(attendanceRecordResponses);
         }
 
-        [HttpGet("alreadyexists")]
+        [HttpGet("alreadyexists/{classId}")]
         [Authorize(Roles = "teacher")]
-        public async Task<IActionResult> AttendanceAlreadyExists()
+        public async Task<IActionResult> AttendanceAlreadyExists([FromRoute] int classid)
         {
-            var alreadyExists = await _attendanceService.CheckIfAlreadyExists();
+            var alreadyExists = await _attendanceService.CheckIfAlreadyExists(classid);
             return Ok(alreadyExists);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteAllAttendanceOfAStudent([FromRoute] int studentId)
+        {
+            var attendanceRecords = await _attendanceService.GetAsync(studentId);
+            await _attendanceService.DeleteAllAttendanceOfAStudent(attendanceRecords);
+            return Ok(new { Success = true} );
         }
 
         [Authorize(Roles ="teacher,student")]
         [HttpGet("get")]
         public async Task<IActionResult> GetAttendance([FromQuery] AttendanceRecordGetDTO attendanceRequests)
         {
+            if (User.IsInRole("student"))
+            {
+                if(!User.HasClaim("student", attendanceRequests.StudentId.ToString()))
+                {
+                    return Forbid();
+                }
+
+            }
             var attendanceRecords = await _attendanceService.GetAttendance(attendanceRequests);
             var attendanceResponses = attendanceRecords.Select(x => x.ToAttendanceRecordResponse()).ToList();
             return Ok(attendanceResponses);

@@ -1,4 +1,5 @@
 ﻿using AttendanceAPI.DTO;
+using AttendanceAPI.Migrations;
 using AttendanceAPI.Models;
 using AttendanceAPI.Repository;
 
@@ -51,11 +52,11 @@ namespace AttendanceAPI.Service
             }
         }
 
-        public async Task<IEnumerable<AttendanceRecord>> GetAllAsync()
+        public async Task<IEnumerable<AttendanceRecord>> GetAllAsync(int classId)
         {
             try
             {
-                return await _recordRepository.GetAllAsync();
+                return await _recordRepository.GetAllAsync(classId);
             }
             catch (Exception ex)
             {
@@ -87,15 +88,20 @@ namespace AttendanceAPI.Service
             }
         }
 
-        public async Task<bool> CheckIfAlreadyExists()
+        public async Task<bool> CheckIfAlreadyExists(int classid)
         {
-            return await _recordRepository.CheckIfAlreadyExists();
+            return await _recordRepository.CheckIfAlreadyExists(classid);
         }
 
 
         public async Task<IEnumerable<AttendanceRecord>> GetAttendance(AttendanceRecordGetDTO attendanceRequests)
         {
             return await _recordRepository.GetAttendance(attendanceRequests);
+        }
+
+        public async Task DeleteAllAttendanceOfAStudent(IEnumerable<AttendanceRecord> attendanceRecords)
+        {
+            await _recordRepository.DeleteRangeAsync(attendanceRecords);
         }
     }
 }
