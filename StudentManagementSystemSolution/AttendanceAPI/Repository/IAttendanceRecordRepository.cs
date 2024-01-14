@@ -8,6 +8,9 @@ namespace AttendanceAPI.Repository
         Task<IEnumerable<AttendanceRecord>> GetAllAsync(int classId);
         Task<IEnumerable<AttendanceRecord>> GetAsync(int id);
         Task<IEnumerable<AttendanceRecord>> GetAttendance(AttendanceRecordGetDTO attendanceRequest);
+
+        //NEW
+        Task<IEnumerable<AttendanceRecord>> GetAttendancesForAStudent(int studentId);
         Task<bool> CreateAsync(AttendanceRecord record);
 
         Task AddRangeAsync(IEnumerable<AttendanceRecord> records);

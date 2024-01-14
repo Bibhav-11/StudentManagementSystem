@@ -88,6 +88,18 @@ namespace AttendanceAPI.Service
             }
         }
 
+        public async Task<IEnumerable<AttendanceRecord>> GetAttendancesForAStudent(int studentId)
+        {
+            try
+            {
+                return await _recordRepository.GetAttendancesForAStudent(studentId);
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> CheckIfAlreadyExists(int classid)
         {
             return await _recordRepository.CheckIfAlreadyExists(classid);

@@ -1,6 +1,8 @@
 @page
 @model IdentityServer.Pages.Login.Index
 
+
+@Html.AntiForgeryToken()
 <div class="login-page">
     <div class="lead">
         <h1>Login</h1>
@@ -20,31 +22,40 @@
                     </div>
 
                     <div class="card-body">
-                        <form asp-page="/Account/Login/Index">
-                            <input type="hidden" asp-for="Input.ReturnUrl" />
+                        <form id="form" asp-page="/Account/Login/Index">
+                            
+                            <input id="returnUrl" type="hidden" asp-for="Input.ReturnUrl" />
 
                             <div class="form-group">
                                 <label asp-for="Input.Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Input.Username" autofocus>
+                                <input id="username" class="form-control" placeholder="Username" asp-for="Input.Username" autofocus>
+                                <span class="text-danger" asp-validation-for="Input.Username"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Input.Password"></label>
-                                <input type="password" class="form-control" placeholder="Password" asp-for="Input.Password" autocomplete="off">
+                                <input id="password" type="password" class="form-control" placeholder="Password" asp-for="Input.Password" autocomplete="off">
+                                <span class="text-danger" asp-validation-for="Input.Password"></span>
                             </div>
-                            
+
+                            <div class="my-2">
+                                <span class="text-danger" id="error"></span>
+                            </div>
+
                             @if (Model.View.AllowRememberLogin)
                             {
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input class="form-check-input" asp-for="Input.RememberLogin">
+                                        <input id="rememberLogin" class="form-check-input" asp-for="Input.RememberLogin">
                                         <label class="form-check-label" asp-for="Input.RememberLogin">
                                             Remember My Login
                                         </label>
                                     </div>
                                 </div>
                             }
+
                             
-                            <button class="btn btn-primary" name="Input.Button" value="login">Login</button>
+
+                            <button id="loginButton" class="btn btn-primary" name="Input.Button" value="login">Login</button>
                             <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
                         </form>
                     </div>
@@ -54,3 +65,146 @@
 
     </div>
 </div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+
+        $("#form").on('submit', e => {
+            e.preventDefault();
+            $("#error").html("");
+            $.validator.unobtrusive.parse('#form');
+
+            var formData = {
+                username: $("#username").val(),
+                password: $("#password").val(),
+                rememberLogin: $("#rememberLogin").prop("checked"),
+                returnUrl: $("#returnUrl").val()
+            };
+
+
+            if (!$("#form").valid()) {
+                return;
+            }
+
+            $("#loginButton").prop("disabled", true);
+            $("#loginButton").html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+            );
+
+            $.ajax({
+                type: "POST",
+                data: formData,
+                url: "/Account/Login?handler=SignInUser",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                success: function (response) {
+                    console.log(response);
+                    if (!response.success) {
+                        //Remove loading spinner
+                        $("#error").html(response.message);
+                        $("#loginButton").prop("disabled", false);
+                        $("#loginButton").html("Login");
+                        return;
+                    }
+                    window.location.href = response.response;
+
+                },
+                error: function () {
+                    //Remove loading spinner
+
+                },
+                complete: function () {
+                    $("#loginButton").prop("disabled", false);
+                    $("#loginButton").html("Login");
+                }
+            })
+        })
+
+
+        //     $.ajax({
+        //         type: "GET",
+        //         data: formData,
+        //         url: "/Account/Login?handler=IsCredentialsCorrect",
+        //         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        //         success: function (response) {
+        //             console.log(response);
+        //             if (!response.success) {
+        //                 Remove loading spinner
+        //                 $("#error").html(response.message);
+        //                 return;
+        //             }
+
+        //             $.ajax({
+        //                 type: "GET",
+        //                 data: response.user,
+        //                 url: "/Account/Login?handler=IsUserActive",
+        //                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        //                 success: function (response) {
+        //                     console.log(response);
+        //                     if (!response.success) {
+        //                         Remove loading spinner
+        //                         $("#error").html(response.message);
+        //                         return;
+        //                     }
+
+        //                     $.ajax({
+        //                         type: "POST",
+        //                         data: formData,
+        //                         url: "/Account/Login",
+        //                         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        //                         success: function (response) {
+        //                             window.location.href = response;
+        //                             if (!response) {
+        //                                 Remove loading spinner
+        //                                 $("#error").html("The credentials are not correct");
+        //                                 return;
+        //                             }
+        //                         },
+        //                         error: function () {
+        //                             Remove loading spinner
+
+        //                         }
+        //                     })
+        //                 },
+        //                 error: function () {
+        //                     Remove loading spinner
+
+        //                 }
+        //             })
+                    
+        //         },
+        //         error: function () {
+        //             Remove loading spinner
+
+        //         }
+        //     })
+        // })
+
+
+        // $.ajax({
+        //     type: "POST",
+        //     data: formData,
+        //     url: "/Account/Login",
+        //     headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        //     success: function (response) {
+        //         window.location.href = response;
+        //         if (!response) {
+        //             Remove loading spinner
+        //             $("#error").html("The credentials are not correct");
+        //             return;
+        //         }
+        //     },
+        //     error: function () {
+        //         Remove loading spinner
+
+        //     }
+        // })
+    </script>
+
+
+
+}

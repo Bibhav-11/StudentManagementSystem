@@ -1,18 +1,16 @@
 ﻿using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
-using SMSClient.Data.Identity;
 using SMSClient.Model;
 using SMSClient.Service.Courses;
 using SMSClient.Service.Departments;
-using SMSClient.Service.Classes;
-using SMSClient.Service.Students;
 
 namespace SMSClient.Controllers
 {
@@ -44,12 +42,40 @@ namespace SMSClient.Controllers
             }
         }
 
+        [CustomAuthorize(AccessLevels.View, Modules.Department)]
+        [HttpGet]
+        public async Task<IActionResult> ShowDepartmentsList()
+        {
+            var departments = await _departmentService.GetDepartments();
+            return PartialView("_DepartmentList", departments);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ActivateDepartment(int id)
+        {
+            var department = await _departmentService.GetDepartmentById(id);
+            department.IsActive = true;
+            await _departmentService.UpdateDepartment(department);
+            return Json(true);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeactivateDepartment(int id)
+        {
+            var department = await _departmentService.GetDepartmentById(id);
+            department.IsActive = false;
+            await _departmentService.UpdateDepartment(department);
+            return Json(true);
+        }
+
         [CustomAuthorize(AccessLevels.Create, Modules.Department)]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
+
+
 
         [CustomAuthorize(AccessLevels.Create, Modules.Department)]
         [HttpPost]

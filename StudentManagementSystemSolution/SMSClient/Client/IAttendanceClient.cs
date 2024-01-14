@@ -13,6 +13,14 @@ namespace SMSClient.Client
 
         //Task<IEnumerable<AttendanceResponse>> GetAttendancesOfAStudent(int studentId, string accessToken);
         Task<HttpResponseMessage> PostListOfAttendanceAsync(IEnumerable<AttendanceRequest> attendanceRequests, string accessToken);
-        Task<bool> CheckIfAlreadyExists(int classId, string accessToken);
+        Task<bool> CheckIfAlreadyExists(string accessToken);
+
+
+        //NEW API
+        Task<IEnumerable<AttendanceResponse>> GetAttendancesOfAClass(string accessToken);
+
+        Task<IEnumerable<AttendanceResponse>> GetAttendancesForAStudent(string accessToken);
+
+        Task<IEnumerable<AttendanceResponse>> GetAttendancesOfAStudent(int studentId, string accessToken);
     }
 }

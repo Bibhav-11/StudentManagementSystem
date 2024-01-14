@@ -3,18 +3,21 @@ using SMSClient.Data.Identity;
 using SMSClient.Model;
 using SMSClient.Repository;
 using SMSClient.Repository.Courses;
+using SMSClient.Service.Classes;
 
 namespace SMSClient.Service.Courses
 {
     public class CourseService : ICourseService
     {
         private readonly ICourseRepositiory _courseRepository;
+        private readonly IClassService _classService;
         private readonly AspIdUsersContext _context;
 
-        public CourseService(ICourseRepositiory courseRepository, AspIdUsersContext context)
+        public CourseService(ICourseRepositiory courseRepository, AspIdUsersContext context, IClassService classService)
         {
             _courseRepository = courseRepository;
             _context = context;
+            _classService = classService;
         }
 
         public async Task<IEnumerable<Course>> GetCourses()
@@ -59,5 +62,11 @@ namespace SMSClient.Service.Courses
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Course>> GetCoursesOfActiveClasses()
+        {
+            var activeClassesIds = (await _classService.GetClassesOfActiveDepartment()).Select(c => c.Id);
+            var activeCourses = (await _courseRepository.FindAll(c => activeClassesIds.Contains(c.ClassId.Value) || c.ClassId == null)).ToList();
+            return activeCourses;
+        }
     }
 }

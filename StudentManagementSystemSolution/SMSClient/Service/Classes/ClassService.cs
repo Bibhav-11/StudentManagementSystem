@@ -3,18 +3,21 @@ using SMSClient.Data.Identity;
 using SMSClient.Model;
 using SMSClient.Repository;
 using SMSClient.Repository.Classes;
+using SMSClient.Service.Departments;
 
 namespace SMSClient.Service.Classes
 {
     public class ClassService : IClassService
     {
         private readonly IClassRepository _classRepository;
+        private readonly IDepartmentService _departmentService;
         private readonly AspIdUsersContext _context;
 
-        public ClassService(IClassRepository classRepository, AspIdUsersContext context)
+        public ClassService(IClassRepository classRepository, AspIdUsersContext context, IDepartmentService departmentService)
         {
             _classRepository = classRepository;
             _context = context;
+            _departmentService = departmentService;
         }
 
         public async Task AddClass(Class classForm)
@@ -49,6 +52,13 @@ namespace SMSClient.Service.Classes
         public Task<IEnumerable<Class>> GetClasses()
         {
             return _classRepository.GetAll();
+        }
+
+        public async Task<IEnumerable<Class>> GetClassesOfActiveDepartment()
+        {
+            var activeDepartmentIds = (await _departmentService.GetActiveDepartments()).Select(d => d.Id).ToList();
+            var activeClasses = await _classRepository.FindAll(c => activeDepartmentIds.Contains(c.DepartmentId.Value) || c.DepartmentId == null);
+            return activeClasses;
         }
 
         public async Task<IEnumerable<Class>> GetClassWithDepartmentInfo()

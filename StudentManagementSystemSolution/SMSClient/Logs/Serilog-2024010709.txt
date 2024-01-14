@@ -1,4 +1,0 @@
-2024-01-07 09:47:20.469 +05:45 [INF] Create department
-2024-01-07 09:47:35.432 +05:45 [INF] Successfully updated the department
-2024-01-07 09:56:27.591 +05:45 [INF] Successfully updated the student
-2024-01-07 09:56:32.623 +05:45 [INF] Successfully updated the student

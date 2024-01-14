@@ -47,7 +47,7 @@ namespace AttendanceAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AttendanceRecords");
+                    b.ToTable("AttendanceRecords", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -50,8 +50,12 @@
 
 
                     <div class="row mt-2">
-                        <label>Class</label>
-                        <div id="classDropdown"></div>
+                        <div class="col-6">
+                            <label>Class</label>
+                            <select class="form-select form-select-lg mb-3" id="classId">
+                                <option value="null" selected>Choose Class</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -74,14 +78,22 @@
 <script>
     var classId;
 
+    var loadedClass = false;
 
-    $("#classDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetClasses", "Students")',
-        displayExpr: "Name",
-        valueExpr: "Id",
-        onValueChanged: function (e) {
-            classId = e.value;
+    $("#classId").on('click', function () {
+        if (!loadedClass) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetClasses", "Students")',
+                dataType: "html",
+                success: function (response) {
+                    console.log(response);
+                    $("#classId").append(response);
+                    loadedClass = true
+                }
+            })
         }
+
     })
 
 
@@ -103,7 +115,7 @@
             lastName: $("#lastName").val(),
             email: $("#email").val(),
             phone: $("#phone").val(),
-            classId: classId
+            classId: $("#classId").val()
         }
         console.log(formData);
         $.ajax({

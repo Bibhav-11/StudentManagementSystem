@@ -4,12 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
-using SMSClient.Models;
-using SMSClient.Models.ViewModel;
-using SMSClient.Service.Courses;
 using SMSClient.Service.Departments;
 using SMSClient.Service.Classes;
-using SMSClient.Service.Students;
 using SMSClient.Model;
 
 namespace SMSClient.Controllers
@@ -30,7 +26,7 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var classes = await _classService.GetClassWithDepartmentInfo();
+            var classes = await _classService.GetClassesOfActiveDepartment();
             return View(classes);
         }
 
@@ -115,14 +111,14 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<object> GetDepartments(DataSourceLoadOptions loadOptions)
         {
-            var departments = await _departmentService.GetDepartments();
+            var departments = await _departmentService.GetActiveDepartments();
             return DataSourceLoader.Load(departments, loadOptions);
         }
 
         [HttpGet]
         public async Task<JsonResult> GetDepartmentsForDropdown()
         {
-            var departments = await _departmentService.GetDepartments();
+            var departments = await _departmentService.GetActiveDepartments();
             return Json(departments);
         }
 

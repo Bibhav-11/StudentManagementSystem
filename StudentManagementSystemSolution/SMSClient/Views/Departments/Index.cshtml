@@ -5,7 +5,7 @@
 @{
 }
 
-@model IEnumerable<SMSClient.Model.Department>
+
 
 <h2>Departments</h2>
 <div asp-accesslevel="@AccessLevels.Create" asp-module="@Modules.Department" style="display: flex; justify-content: end; margin-bottom: 20px">
@@ -13,62 +13,7 @@
 </div>
 
 
-<div style="margin-top: 10px">
-       
-    <table class="table table-bordered table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>
-                    Id
-                </th>
-                <th>
-                    Short Name
-                </th>
-                <th>
-                    Long Name
-                </th>
-                <th>
-                    Email
-                </th>
-                <th>
-                    Phone
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var obj in Model)
-            {
-                <tr>
-                    <td>
-                        @obj.Id
-                    </td>
-                    <td>
-                        @obj.ShortName
-                    </td>
-                    <td>
-                        @obj.LongName
-                    </td>
-                    <td>
-                        @obj.Email
-                    </td>
-                    <td>
-                        @obj.Phone
-                    </td>
-                    <td>
-                        <div class="w-75 d-flex" role="group">
-                            <button id="@obj.Id" onclick="showEditDepartmentModal(this.id);" asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.Department" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</button>
-                            <button id="@obj.Id" onclick="showDeleteDepartmentModal(this.id);" asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.Department" class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-
-    </table>
-</div>
+<div id="departmentsListContainer"></div>
 
 <div id="editDepartmentModalContainer"></div>
 <div id="deleteDepartmentModalContainer"></div>
@@ -77,6 +22,47 @@
 <script>
     function navigateToCreateDepartments() {
         window.location.href = '@Url.Action("Create")'
+    }
+
+    $("document").ready(function () {
+        showDepartmentsList();
+    })
+
+    function showDepartmentsList() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ShowDepartmentsList")',
+            dataType: 'html',
+            success: function (data) {
+                $("#departmentsListContainer").html(data);
+            }
+        });
+    }
+
+    function activateDepartment(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivateDepartment")',
+            data: { id: id },
+            success: function (data) {
+                if (data) {
+                    showDepartmentsList();
+                }
+            }
+        });
+    }
+
+    function deactivateDepartment(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeactivateDepartment")',
+            data: { id: id },
+            success: function (data) {
+                if (data) {
+                    showDepartmentsList();
+                }
+            }
+        });
     }
 
     function showEditDepartmentModal(id) {

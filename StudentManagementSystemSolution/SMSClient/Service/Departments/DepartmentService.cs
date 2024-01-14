@@ -63,5 +63,10 @@ namespace SMSClient.Service.Departments
         {
             return await _departmentRepository.GetDepartmentWithClassInfo(departmentId);
         }
+
+        public async Task<IEnumerable<Department>> GetActiveDepartments()
+        {
+            return await _departmentRepository.FindAll(d => d.IsActive == true);
+        }
     }
 }

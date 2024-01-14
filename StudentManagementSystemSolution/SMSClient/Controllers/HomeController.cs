@@ -1,18 +1,9 @@
-﻿using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SMSClient.Authentication;
-using SMSClient.Client;
 using SMSClient.Model;
-using SMSClient.Repository;
-using SMSClient.Service.Courses;
 using SMSClient.Service.Users;
-using SQLitePCL;
-using System.Diagnostics;
 
 namespace SMSClient.Controllers
 {

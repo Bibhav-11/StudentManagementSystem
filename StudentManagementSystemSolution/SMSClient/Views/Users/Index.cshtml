@@ -14,42 +14,8 @@
 </button>
 
 
-<div style="margin-top: 10px">
 
-    <table class="table table-bordered table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>
-                    Email
-                </th>
-                <th>
-                    UserName
-                </th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var obj in Model)
-            {
-                <tr>
-                    <td width="50%">
-                        @obj.Email
-                    </td>
-                    <td width="30%">
-                        @obj.UserName
-                    </td>
-                    <td>
-                        <div class="" role="group">
-                            <button asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.User" id="@obj.Id" onclick="renderPartialViewUpdate(this.id)" class="btn btn-primary mx-2">Edit</button>
-                            <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.User" id="@obj.Id" onclick="renderPartialViewDelete(this.id)" class="btn btn-danger mx-2"> Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-
-    </table>
-</div>
+<div id="usersListContainer"></div>
 
 <div id="createUserModalContainer"></div>
 <div id="editUserModalContainer"></div>
@@ -57,14 +23,51 @@
 
 
 
-
-<div id="myPartialContainer">
-
-</div>
-
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
 <script>
+    $("document").ready(function() {
+        showUsersList();
+    })
+
+
+    function showUsersList() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ShowUsersList")',
+            dataType: 'html',
+            success: function (data) {
+                $("#usersListContainer").html(data);
+            }
+        });
+    }
+
+    function activateUser(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivateUser")',
+            data: {id: id},
+            success: function (data) {
+                if (data) {
+                    showUsersList();
+                }
+            }
+        });
+    }
+
+    function deactivateUser(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeactivateUser")',
+            data: { id: id },
+            success: function (data) {
+                if (data) {
+                    showUsersList();
+                }
+            }
+        });
+    }
+
 
     function openCreateUserModal() {
         $.ajax({
@@ -79,7 +82,6 @@
 
 
     function renderPartialViewUpdate(userId) {
-        console.log(userId);
         $.ajax({
             url: '@Url.Action("ShowUpdateUserModal", "Users")' + "?userId=" + userId,
             dataTyle: 'html',

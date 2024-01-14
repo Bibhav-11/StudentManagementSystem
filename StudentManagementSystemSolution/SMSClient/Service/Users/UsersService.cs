@@ -123,6 +123,7 @@ namespace SMSClient.Service.Users
                         UserName = userForm.UserName,
                         Email = userForm.Email,
                         EmailConfirmed = true,
+                        IsActive = true,
                     };
 
                     var result = await _userManager.CreateAsync(user, userForm.Password);

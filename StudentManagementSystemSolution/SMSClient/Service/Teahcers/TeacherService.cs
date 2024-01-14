@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SMSClient.Data.Identity;
 using SMSClient.Model;
-using SMSClient.Models;
 using SMSClient.Repository;
 using SMSClient.Repository.Teachers;
+using SMSClient.Service.Classes;
 using System.Security.Claims;
 
 namespace SMSClient.Service.Teahcers
@@ -11,14 +11,16 @@ namespace SMSClient.Service.Teahcers
     public class TeacherService : ITeacherService
     {
         private readonly ITeacherRepository _teacherRepository;
+        private readonly IClassService _classService;
         private readonly AspIdUsersContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TeacherService(ITeacherRepository teacherRepository, AspIdUsersContext context, UserManager<ApplicationUser> userManager)
+        public TeacherService(ITeacherRepository teacherRepository, AspIdUsersContext context, UserManager<ApplicationUser> userManager, IClassService classService)
         {
             _teacherRepository = teacherRepository;
             _context = context;
             _userManager = userManager;
+            _classService = classService;
         }
 
         public async Task AddTeacher(Teacher teacher)
@@ -72,6 +74,13 @@ namespace SMSClient.Service.Teahcers
         public async Task<IEnumerable<Teacher>> GetTeachers()
         {
             return await _teacherRepository.GetAll();
+        }
+
+        public async Task<IEnumerable<Teacher>> GetTeachersOfActiveClasses()
+        {
+            var activeClassIds = (await _classService.GetClassesOfActiveDepartment()).Select(c => c.Id).ToList();
+            var activeTeachers = await _teacherRepository.FindAll(t => activeClassIds.Contains(t.ClassId.Value) || t.ClassId == null);
+            return activeTeachers;
         }
 
         public async Task<IEnumerable<Teacher>> GetTeachersWithClassInfo()

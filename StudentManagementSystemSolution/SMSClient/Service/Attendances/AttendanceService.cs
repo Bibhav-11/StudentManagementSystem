@@ -64,10 +64,8 @@ namespace SMSClient.Service.Attendances
                 var attendanceRequest = new AttendanceRequest
                 {
                     StudentId = studentId,
-                    TeacherId = teacherId,
                     AttendanceDate = DateOnly.FromDateTime(DateTime.Now),
                     IsPresent = IsStudentPresent ? 1 : 0,
-                    ClassId = classId
                 };
                 attendanceRequests.Add(attendanceRequest);
             }

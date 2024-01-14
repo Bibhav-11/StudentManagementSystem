@@ -56,37 +56,11 @@ namespace IdentityServer.Pages.Login
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<JsonResult> OnPost(InputModel Input)
         {
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
 
-            // the user clicked the "cancel" button
-            if (Input.Button != "login")
-            {
-                if (context != null)
-                {
-                    // if the user cancels, send a result back into IdentityServer as if they 
-                    // denied the consent (even if this client does not require consent).
-                    // this will send back an access denied OIDC error response to the client.
-                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
-
-                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    if (context.IsNativeClient())
-                    {
-                        // The client is native, so this change in how to
-                        // return the response is for better UX for the end user.
-                        return this.LoadingPage(Input.ReturnUrl);
-                    }
-
-                    return Redirect(Input.ReturnUrl);
-                }
-                else
-                {
-                    // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
-                }
-            }
 
             if (ModelState.IsValid)
             {
@@ -102,21 +76,21 @@ namespace IdentityServer.Pages.Login
                         {
                             // The client is native, so this change in how to
                             // return the response is for better UX for the end user.
-                            return this.LoadingPage(Input.ReturnUrl);
+                            //return this.LoadingPage(Input.ReturnUrl);
                         }
 
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                        return Redirect(Input.ReturnUrl);
+                        return new JsonResult(new { Success = true, Response = Input.ReturnUrl }) ;
                     }
 
                     // request for a local page
                     if (Url.IsLocalUrl(Input.ReturnUrl))
                     {
-                        return Redirect(Input.ReturnUrl);
+                        return new JsonResult(new { Success = true, Response = Input.ReturnUrl });
                     }
                     else if (string.IsNullOrEmpty(Input.ReturnUrl))
                     {
-                        return Redirect("~/");
+                        return new JsonResult(new {Success = true, Response = "~/" });
                     }
                     else
                     {
@@ -131,8 +105,63 @@ namespace IdentityServer.Pages.Login
 
             // something went wrong, show form with error
             await BuildModelAsync(Input.ReturnUrl);
-            return Page();
+            return new JsonResult(new { Success = false, Message = "Problem signing in the user" });
         }
+
+
+        public async Task<JsonResult> OnGetIsCredentialsCorrect(InputModel input)
+        {
+            var user = await _userManager.FindByNameAsync(input.Username);
+            var result = await _userManager.CheckPasswordAsync(user, input.Password);
+            if (result == false) return new JsonResult(new { Success = false, Message = "Invalid credentials" });
+            else return new JsonResult( new { Success = true, User = user } );
+        }
+
+        public JsonResult OnGetIsUserActive(ApplicationUser user)
+        {
+            if ((user.IsActive.HasValue && !user.IsActive.Value) || !user.IsActive.HasValue)
+            {
+                return new JsonResult( new { Success = false, Message = "Sorry, the user is deactivated. Please contact the admin to reactivate the account" } );
+            }
+            return new JsonResult(new { Success = true });
+        }
+
+
+        public async Task<JsonResult> OnPostSignInUser(InputModel input)
+        {
+            if(!ModelState.IsValid)
+            {
+                return new JsonResult(new { Success = false, Message = "Invalid input" });
+            }
+
+            var user = await _userManager.FindByNameAsync(input.Username);
+
+            var response = await IsCredentialsCorrect(user, input.Password);
+            if(!response) return new JsonResult(new { Success = false, Message = "Invalid Credentials"});
+
+            var isActive = IsUserActive(user);
+            if (!isActive) return new JsonResult(new { Success = false, Message = "You are deactivated. Please contact your admin to activate your account" });
+
+            var result = await OnPost(input);
+            return result;
+        }
+
+        public async Task<bool> IsCredentialsCorrect(ApplicationUser user, string password)
+        {
+            var result = await _userManager.CheckPasswordAsync(user, password);
+            return result;
+        }
+
+        public bool IsUserActive(ApplicationUser user)
+        {
+            if ((user.IsActive.HasValue && !user.IsActive.Value) || !user.IsActive.HasValue)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
 
         private async Task BuildModelAsync(string returnUrl)
         {

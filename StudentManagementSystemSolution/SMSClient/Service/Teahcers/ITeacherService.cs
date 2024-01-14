@@ -6,6 +6,7 @@ namespace SMSClient.Service.Teahcers
     {
 
         Task<IEnumerable<Teacher>> GetTeachers();
+        Task<IEnumerable<Teacher>> GetTeachersOfActiveClasses();
         Task<IEnumerable<Teacher>> GetTeachersWithClassInfo();
         Task<Teacher?> GetTeacherById(int id);
         Task<Teacher?> GetTeacherByUserId(string userId);

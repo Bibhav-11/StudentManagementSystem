@@ -6,6 +6,7 @@ namespace SMSClient.Service.Classes
     public interface IClassService
     {
         Task<IEnumerable<Class>> GetClasses();
+        Task<IEnumerable<Class>> GetClassesOfActiveDepartment();
         Task<Class?> GetClassById(int id);
         Task<Class?> GetClassWithRelatedEntities(int classId);
         Task<IEnumerable<Class>> GetClassWithDepartmentInfo();

@@ -7,12 +7,9 @@ using Newtonsoft.Json;
 using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
-using SMSClient.Data.Identity;
 using SMSClient.Model;
-using SMSClient.Models.ViewModel;
 using SMSClient.Service.Classes;
 using SMSClient.Service.Courses;
-using SMSClient.Service.Departments;
 
 namespace SMSClient.Controllers
 {
@@ -34,7 +31,7 @@ namespace SMSClient.Controllers
         {
             try
             {
-                var courses = await _courseService.GetCoursesWithClassInfo();
+                var courses = await _courseService.GetCoursesOfActiveClasses();
                 return View(courses);
             }
             catch(Exception ex)
@@ -183,7 +180,7 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<IActionResult> GetClassesDropdown()
         {
-            var classes = await _classService.GetClasses();
+            var classes = await _classService.GetClassesOfActiveDepartment();
             return PartialView("_ClassDropdown", classes);
         }
 

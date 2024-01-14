@@ -1,0 +1,67 @@
+﻿@using SMSClient.Constants;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<SMSClient.Model.ApplicationUser>
+
+<div style="margin-top: 10px">
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Email
+                </th>
+                <th>
+                    UserName
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>
+                        @obj.Email
+                    </td>
+                    <td>
+                        @obj.UserName
+                    </td>
+                    
+                        @if ((obj.IsActive.HasValue && !obj.IsActive.Value) || !obj.IsActive.HasValue) {
+                        <td>
+                            Not Active
+                        </td>
+                        }
+                        else {
+                        <td>
+                            Active
+                        </td>    
+                        }
+                    <td>
+                        <div class="d-flex" role="group">
+                            <button asp-accesslevel="@AccessLevels.Edit" asp-module="@Modules.User" id="@obj.Id" onclick="renderPartialViewUpdate(this.id)" class="btn btn-primary mx-2">Edit</button>
+
+                            @if ((obj.IsActive.HasValue && !obj.IsActive.Value) || !obj.IsActive.HasValue)
+                            {
+                                <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.User" id="@obj.Id" onclick="activateUser(this.id)" class="btn btn-success mx-2">Activate</button>
+                            }
+                            else
+                            {
+                                <button asp-accesslevel="@AccessLevels.Delete" asp-module="@Modules.User" id="@obj.Id" onclick="deactivateUser(this.id)" class="btn btn-danger mx-2">Deactivate</button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

@@ -26,7 +26,7 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var teachers = await _teacherService.GetTeachersWithClassInfo();
+            var teachers = await _teacherService.GetTeachersOfActiveClasses();
             return View(teachers);
         }
 
@@ -114,13 +114,13 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<JsonResult> GetDepartments()
         {
-            return Json(await _departmentService.GetDepartments());
+            return Json(await _departmentService.GetActiveDepartments());
         }
 
         [HttpGet]
         public async Task<JsonResult> GetClasses()
         {
-            return Json(await _classService.GetClasses());
+            return Json(await _classService.GetClassesOfActiveDepartment());
         }
 
     }

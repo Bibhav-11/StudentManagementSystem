@@ -7,6 +7,9 @@ namespace AttendanceAPI.Service
     {
         Task<bool> CreateAsync(AttendanceRecord attendanceRecord);
         Task CreateListOfAttendancesAsync(IEnumerable<AttendanceRecord> attendanceRecords);
+
+        //New
+        Task<IEnumerable<AttendanceRecord>> GetAttendancesForAStudent(int studentId);
         Task<IEnumerable<AttendanceRecord>> GetAsync(int id);
         Task<IEnumerable<AttendanceRecord>> GetAllAsync(int classId);  
         Task<bool> UpdateAsync(AttendanceRecord attendanceRecord);

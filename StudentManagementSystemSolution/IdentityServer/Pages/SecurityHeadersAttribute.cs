@@ -28,7 +28,9 @@ namespace IdentityServer.Pages
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
-                csp += "style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css;";
+                csp += "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css;";
+                csp += "script-src 'self' 'unsafe-inline';";
+                csp += "connect-src 'self' ws://localhost:44309 wss://localhost:44309";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 //csp += "upgrade-insecure-requests;";
                 // also an example if you need client images to be displayed from twitter

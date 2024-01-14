@@ -84,6 +84,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudHNcX0RlbGV0ZURlcGFydG1lbnRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Departments/_DepartmentList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudHNcX0RlcGFydG1lbnRMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Departments/_EditDepartmentModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudHNcX0VkaXREZXBhcnRtZW50TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -112,16 +116,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcX0RlbGV0ZVJvbGVNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Shared/_ClassDropdown.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9DbGFzc0Ryb3Bkb3duLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Shared/_DevExtremeLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9EZXZFeHRyZW1lTGF5b3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Students/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Students/Index.cshtml]
@@ -156,10 +160,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlcnNcX0VkaXRUZWFjaGVyTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Users/AssignRolesToUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQXNzaWduUm9sZXNUb1VzZXIuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Users/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -182,6 +182,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Users/_RolesDropdown.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcX1JvbGVzRHJvcGRvd24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/Users/_UserList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcX1VzZXJMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Student Management System/StudentManagementSystemSolution/SMSClient/Views/_ViewImports.cshtml]

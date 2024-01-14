@@ -7,9 +7,7 @@ using Newtonsoft.Json;
 using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
-using SMSClient.Models;
-using SMSClient.Models.Identity;
-using SMSClient.Models.ViewModel;
+using SMSClient.Model;
 using System.Security.Claims;
 
 namespace SMSClient.Controllers

@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SMSClient.Client;
-using SMSClient.Model;
 using SMSClient.Model.ApiModel;
-using SMSClient.Models;
 using SMSClient.Service.Attendances;
 using SMSClient.Service.Students;
 using SMSClient.Service.Teahcers;
@@ -36,13 +34,8 @@ namespace SMSClient.Controllers
         [Authorize(Roles = "teacher")]
         public async Task<IActionResult> Index()
         {
-            var currentUser = HttpContext.User;
-
-            var classId = await _attendanceService.GetClassId(currentUser);
-            if (classId == null) return View(new List<AttendanceList>());
-
             string accessToken = await HttpContext.GetTokenAsync("access_token");
-            IEnumerable<AttendanceResponse>? attendanceResponses = await _attendanceClient.GetAllAttendances(classId, accessToken);
+            IEnumerable<AttendanceResponse>? attendanceResponses = await _attendanceClient.GetAttendancesOfAClass(accessToken);
             IEnumerable<AttendanceList> attendanceLists = await _attendanceService.AttendanceResponseToList(attendanceResponses);
             return View(attendanceLists);
         }
@@ -62,7 +55,9 @@ namespace SMSClient.Controllers
             var classId = await _attendanceService.GetClassId(HttpContext.User);
             if (classId is null) return View();
             int classIdValue = classId.Value;
-            var attendanceAlreadyMarked = await _attendanceClient.CheckIfAlreadyExists(classIdValue, accessToken);
+
+
+            var attendanceAlreadyMarked = await _attendanceClient.CheckIfAlreadyExists(accessToken);
             if(attendanceAlreadyMarked) { ViewBag.AttendanceAlreadyMarked = true; }
             else ViewBag.AttendanceAlreadyMarked = false;
             var students = await _studentService.GetStudentsByClassId(classIdValue);
@@ -73,18 +68,8 @@ namespace SMSClient.Controllers
         [Authorize(Roles = "student")]
         public async Task<IActionResult> MyAttendance()
         {
-            var user = HttpContext.User;
-            var currentUser = await _userService.GetUserAsync(user);
-            var student = await _studentService.GetStudentByUserId(currentUser.Id);
-            if(student == null) { return View(); }
-
-            var attendanceGetRequest = new AttendanceGetRequest
-            {
-                StudentId = student.Id,
-            };
-
             string accessToken = await HttpContext.GetTokenAsync("access_token");
-            var attendanceResponses = await _attendanceClient.GetAttendances(attendanceGetRequest, accessToken);
+            var attendanceResponses = await _attendanceClient.GetAttendancesForAStudent(accessToken);
             var attendanceLists = await _attendanceService.AttendanceResponseToList(attendanceResponses);
             return View(attendanceLists);
         }
@@ -122,17 +107,8 @@ namespace SMSClient.Controllers
         public async Task<object> ListStudents(DataSourceLoadOptions loadOptions, int studentId)
         {
             string accessToken = await HttpContext.GetTokenAsync("access_token");
-            if (studentId == 0) return new List<object>();
-            var currentUser = HttpContext.User;
-            var classId = await _attendanceService.GetClassId(currentUser);
-
-            var attendanceRequest = new AttendanceGetRequest
-            {
-                StudentId = studentId,
-                ClassId = classId
-            };
-            
-            var attendanceResponses = await _attendanceClient.GetAttendances(attendanceRequest, accessToken);
+            if (studentId == 0) return new List<object>();            
+            var attendanceResponses = await _attendanceClient.GetAttendancesOfAStudent(studentId, accessToken);
             var attendanceLists = await _attendanceService.AttendanceResponseToList(attendanceResponses);
             
             return DataSourceLoader.Load(attendanceLists, loadOptions);

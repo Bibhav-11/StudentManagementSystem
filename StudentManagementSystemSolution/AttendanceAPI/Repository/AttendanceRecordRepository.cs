@@ -95,5 +95,11 @@ namespace AttendanceAPI.Repository
             _attendanceContext.RemoveRange(attendanceRecords);
             await _attendanceContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<AttendanceRecord>> GetAttendancesForAStudent(int studentId)
+        {
+            var attendanceRecords = await _attendanceContext.AttendanceRecords.FromSql<AttendanceRecord>($"EXEC AttendanceRecords_GetList @Studentid = {studentId}").ToListAsync();
+            return attendanceRecords;
+        }
     }
 }

@@ -174,6 +174,9 @@ namespace SMSClient.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -282,6 +285,9 @@ namespace SMSClient.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LongName")
                         .IsRequired()

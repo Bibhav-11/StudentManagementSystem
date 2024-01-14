@@ -32,8 +32,15 @@ namespace SMSClient.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [CustomAuthorize(AccessLevels.View, Modules.User)]
+        [HttpGet]
+        public IActionResult ShowUsersList()
+        {
             var users = _usersService.GetAllUsers();
-            return View(users);
+            return PartialView("_UserList", users);
         }
 
         [CustomAuthorize(AccessLevels.Create, Modules.User)]
@@ -41,6 +48,24 @@ namespace SMSClient.Controllers
         public IActionResult ShowCreateUserModal()
         {
             return PartialView("_CreateUserModal");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ActivateUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            user.IsActive = true;
+            await _userManager.UpdateAsync(user);
+            return Json(true);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeactivateUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            user.IsActive = false;
+            await _userManager.UpdateAsync(user);
+            return Json(true);
         }
 
         [CustomAuthorize(AccessLevels.Create, Modules.User)]

@@ -54,20 +54,11 @@
                                     <div data-value="@Model.DateOfBirth" id="editStudentDOBContainer"></div>
                                 </div>
                         </div>
-
                     <div class="row mt-2">
-                        @*<div class="col-6">
-                            <label>Department</label>
-                             <div data-value="@Model.DepartmentId" id="departmentDropdown"></div>
-                        </div>
-                        <div class="col-6">
-                            <label>Semester</label>
-                            <div data-value="@Model.SemesterId" id="semesterDropdown"></div>
-                        </div>*@
-
-                        <div class="col-6">
+                        <div class="col-6" id="classContainer">
                             <label>Class</label>
-                            <div data-value="@Model.ClassId" id="classDropdown"></div>
+                            <select id="selectedClass" class="form-select form-select-lg mb-3">
+                            </select>
                         </div>
                     </div>
 
@@ -89,6 +80,19 @@
 }
 
 <script>
+
+    $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetClasses", "Students")',
+        success: function (response) {
+            $("#selectedClass").html(response);
+            $("#selectedClass").val(@Model.ClassId);
+        },
+        error: function (e) {
+            $.notify(e.message)
+        }
+    })
+
     var date = $("#editStudentDOBContainer").data("value"), classId = $("#classDropdown").data("value");
     $('#editStudentDOBContainer').dxDateBox({
         placeholder: '10/16/2018',
@@ -102,16 +106,6 @@
             date = e.value;
         }
     });
-
-    $("#classDropdown").dxSelectBox({
-        dataSource: '@Url.Action("GetClasses", "Students")',
-        displayExpr: "Name",
-        valueExpr: "Id",
-        value: $("#classDropdown").data("value"),
-        onValueChanged: function (e) {
-            classId = e.value;
-        }
-    })
 
 
     $("#editStudentForm").on('submit', function (e) {
@@ -134,7 +128,7 @@
             email: $("#email").val(),
             phone: $("#phone").val(),
             dateOfBirth: date,
-            classId: classId,
+            classId: $("#selectedClass").val(),
             applicationUserId: $("#ApplicationUserId").val(),
         }
         console.log(formData);

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bufcYxo6JD0pvdQwR8Yiy2pTLIzaP4y0abs/fdSC44olyV4bGsf2EYSi+Q1pJpVPR8JWWQFaT0cL9HKmtQfLQA==",
+  "dgSpecHash": "Dpqbdelgtfq9mxfh8Bb4ZqswPHPave1ljEUs+xBFx5wDTOMzKUb7QCywH36a1FANFqPiH0PVBKfiOn8meD+43g==",
   "success": true,
   "projectFilePath": "D:\\Student Management System\\StudentManagementSystemSolution\\IdentityServer\\IdentityServer.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,8 @@
     "C:\\Users\\Bibhav\\.nuget\\packages\\duende.identityserver.storage\\6.3.2\\duende.identityserver.storage.6.3.2.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\identitymodel\\6.1.0\\identitymodel.6.1.0.nupkg.sha512",
+    "C:\\Users\\Bibhav\\.nuget\\packages\\jquery\\1.8.0\\jquery.1.8.0.nupkg.sha512",
+    "C:\\Users\\Bibhav\\.nuget\\packages\\jquery.validation\\1.8.0.1\\jquery.validation.1.8.0.1.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\6.0.0\\microsoft.aspnetcore.authentication.google.6.0.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\6.0.0\\microsoft.aspnetcore.authentication.openidconnect.6.0.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.0\\microsoft.aspnetcore.cryptography.internal.6.0.0.nupkg.sha512",
@@ -54,6 +56,7 @@
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.identitymodel.protocols\\6.10.0\\microsoft.identitymodel.protocols.6.10.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.10.0\\microsoft.identitymodel.protocols.openidconnect.6.10.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.0\\microsoft.identitymodel.tokens.6.10.0.nupkg.sha512",
+    "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.jquery.unobtrusive.validation\\4.0.0\\microsoft.jquery.unobtrusive.validation.4.0.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Bibhav\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",

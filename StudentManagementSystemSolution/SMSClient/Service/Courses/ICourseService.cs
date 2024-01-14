@@ -6,6 +6,7 @@ namespace SMSClient.Service.Courses
     public interface ICourseService
     {
         Task<IEnumerable<Course>> GetCourses();
+        Task<IEnumerable<Course>> GetCoursesOfActiveClasses();
         Task<IEnumerable<Course>> GetCoursesWithClassInfo();
         Task<Course?> GetCourseById(string id);
         IEnumerable<Course> GetUnassignedCoursesofDepartment();

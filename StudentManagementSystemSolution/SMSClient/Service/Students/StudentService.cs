@@ -5,6 +5,7 @@ using SMSClient.Repository;
 using SMSClient.Repository.Students;
 using SMSClient.Model;
 using System.Security.Claims;
+using SMSClient.Service.Classes;
 
 namespace SMSClient.Service.Students
 {
@@ -12,16 +13,18 @@ namespace SMSClient.Service.Students
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IRepository<UserInfo> _userInfoRepository;
+        private readonly IClassService _classService;
         private readonly AspIdUsersContext _context;
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public StudentService(IStudentRepository studentRepository, IRepository<UserInfo> userInfoRepository, AspIdUsersContext context, UserManager<ApplicationUser> userManager)
+        public StudentService(IStudentRepository studentRepository, IRepository<UserInfo> userInfoRepository, AspIdUsersContext context, UserManager<ApplicationUser> userManager, IClassService classService)
         {
             _studentRepository = studentRepository;
             _userInfoRepository = userInfoRepository;
             _context = context;
             _userManager = userManager;
+            _classService = classService;
         }
 
         public async Task<IEnumerable<Student>> GetStudents()
@@ -111,6 +114,13 @@ namespace SMSClient.Service.Students
         public async Task<IEnumerable<Student>> GetStudentsWithClassInfo()
         {
             return await _studentRepository.GetStudentsWithClassInfo();
+        }
+
+        public async Task<IEnumerable<Student>> GetStudentsOfActiveClasses()
+        {
+            var activeClassIds = (await _classService.GetClassesOfActiveDepartment()).Select(c => c.Id).ToList();
+            var activeStudents = await _studentRepository.FindAll(s => activeClassIds.Contains(s.ClassId.Value) || s.ClassId == null);
+            return activeStudents;
         }
     }
 }

@@ -7,12 +7,10 @@ using Newtonsoft.Json;
 using Serilog;
 using SMSClient.Authentication;
 using SMSClient.Constants;
-using SMSClient.Data.Identity;
 using SMSClient.Model;
 using SMSClient.Service.Departments;
 using SMSClient.Service.Classes;
 using SMSClient.Service.Students;
-using SMSClient.Service.Users;
 
 namespace SMSClient.Controllers
 {
@@ -33,7 +31,7 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var students = await _studentService.GetStudentsWithClassInfo();
+            var students = await _studentService.GetStudentsOfActiveClasses();
             return View(students);
         }
 
@@ -129,13 +127,14 @@ namespace SMSClient.Controllers
         [HttpGet]
         public async Task<JsonResult> GetDepartments()
         {
-            return Json(await _departmentService.GetDepartments()); 
+            return Json(await _departmentService.GetActiveDepartments()); 
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetClasses()
+        public async Task<IActionResult> GetClasses()
         {
-            return Json(await _classService.GetClasses());
+            var classes = await _classService.GetClassesOfActiveDepartment();
+            return PartialView("_ClassDropdown", classes);
         }
 
     }

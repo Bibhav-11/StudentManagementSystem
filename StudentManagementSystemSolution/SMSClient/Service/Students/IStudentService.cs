@@ -5,6 +5,7 @@ namespace SMSClient.Service.Students
     public interface IStudentService
     {
         Task<IEnumerable<Student>> GetStudents();
+        Task<IEnumerable<Student>> GetStudentsOfActiveClasses();
         Task<IEnumerable<Student>> GetStudentsWithClassInfo();
         Task<IEnumerable<Student>> GetStudentsByClassId(int classId);
 
